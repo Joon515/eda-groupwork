@@ -1,20 +1,24 @@
 module rptr #(
     parameter int ADDR_WIDTH = 6,
-    parameter int PTR_WIDTH = ADDR_WIDTH + 1
 )(
-    input  logic                 rclk,
-    input  logic                 rrst_n,
-    input  logic                 rinc,
+    input  logic                  rclk,
+    input  logic                  rrst_n,
+    input  logic                  rinc,
     input  logic [PTR_WIDTH-1:0]  wgray_sync,
     output logic [ADDR_WIDTH-1:0] raddr,
     output logic [PTR_WIDTH-1:0]  rgray,
-    output logic                 rempty
+    output logic                  rempty
     );
+
+/*======================== Parameter and Internal Signal =========================*/
+    localparam int PTR_WIDTH = ADDR_WIDTH + 1
 
     logic [PTR_WIDTH-1:0] rbin;
     logic [PTR_WIDTH-1:0] rbin_next;
     logic [PTR_WIDTH-1:0] rgray_next;
 
+
+/*================================== Main Code ===================================*/
     assign rbin_next  = rbin + (rinc && !rempty);
     assign rgray_next = (rbin_next >> 1) ^ rbin_next;
     
@@ -35,5 +39,7 @@ module rptr #(
             rempty <= rempty_val;
         end
     end
+
+/*================================================================================*/
 
 endmodule

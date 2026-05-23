@@ -1,20 +1,25 @@
 module wptr #(
     parameter int ADDR_WIDTH = 6,
-    parameter int PTR_WIDTH = ADDR_WIDTH + 1
+
 )(
-    input  logic                 wclk,
-    input  logic                 wrst_n,
-    input  logic                 winc,
+    input  logic                  wclk,
+    input  logic                  wrst_n,
+    input  logic                  winc,
     input  logic [PTR_WIDTH-1:0]  rgray_sync,
     output logic [ADDR_WIDTH-1:0] waddr,
     output logic [PTR_WIDTH-1:0]  wgray,
-    output logic                 wfull
+    output logic                  wfull
     );
+
+/*======================== Parameter and Internal Signal =========================*/
+    localparam int PTR_WIDTH = ADDR_WIDTH + 1
 
     logic [PTR_WIDTH-1:0] wbin;
     logic [PTR_WIDTH-1:0] wbin_next;
     logic [PTR_WIDTH-1:0] wgray_next;
 
+
+/*================================== Main Code ===================================*/
     // 计算下一个二进制地址和格雷码
     assign wbin_next  = wbin + (winc && !wfull);
     assign wgray_next = (wbin_next >> 1) ^ wbin_next;
@@ -36,5 +41,7 @@ module wptr #(
             wfull <= wfull_val;
         end
     end
+
+/*================================================================================*/
 
 endmodule

@@ -7,8 +7,11 @@ module sync_gray #(
     output logic [WIDTH-1:0] dout
     );
 
+/*======================== Parameter and Internal Signal =========================*/
     logic [WIDTH-1:0] stage1;
 
+
+/*================================== Main Code ===================================*/
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             stage1 <= '0;
@@ -19,4 +22,5 @@ module sync_gray #(
         end
     end
 
+/*================================================================================*/
 endmodule

@@ -1,0 +1,17 @@
+Tests
+
+Total Coverage Summary 
+SCORE  LINE   COND   TOGGLE FSM    BRANCH GROUP  
+ 97.31 100.00  90.00  96.56 --     100.00 100.00 
+
+
+Total tests in report: 6
+-------------------------------------------------------------------------------
+Data from the following tests was used to generate this report
+simv/fifo_random_test_dp64_fwft0_reg0    
+simv/fifo_boundary_test_dp64_fwft0_reg0  
+simv/fifo_random_test_dp32_fwft1_reg0    
+simv/fifo_boundary_test_dp32_fwft1_reg0  
+simv/fifo_random_test_dp128_fwft1_reg1   
+simv/fifo_boundary_test_dp128_fwft1_reg1 
+

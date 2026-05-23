@@ -1,0 +1,18 @@
+Design Module List
+
+Total Module Definition Coverage Summary 
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+ 96.66 100.00  90.00  96.64 --     100.00 
+
+
+Total modules in report: 7
+-------------------------------------------------------------------------------
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME           
+ 87.50 100.00 --      75.00 --     --     tb_top         
+ 96.56 100.00  90.00  96.26 --     100.00 async_fifo_top 
+ 97.62 --     --      97.62 --     --     fifo_if        
+ 98.25 100.00 --      94.74 --     100.00 sync_gray      
+ 98.36 100.00 --      95.07 --     100.00 wptr           
+ 99.30 100.00 --      97.89 --     100.00 rptr           
+100.00 100.00 --     100.00 --     100.00 dual_port_ram  
+

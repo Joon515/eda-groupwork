@@ -1,0 +1,12 @@
+// RTL Sources
+../rtl_src/fifo_cfg_pkg.sv
+../rtl_src/sync_gray.sv
+../rtl_src/dual_port_ram.sv
+../rtl_src/wptr.sv
+../rtl_src/rptr.sv
+../rtl_src/async_fifo_top.sv
+
+// UVM Verification Sources
+../uvm_src/fifo_if.sv
+../uvm_src/fifo_env_pkg.sv
+../uvm_src/tb_top.sv

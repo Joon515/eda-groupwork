@@ -1,0 +1,23 @@
+Design Hierarchy
+
+
+----------------
+SCORE  LINE   COND   TOGGLE FSM    BRANCH        
+ 96.64 100.00  90.00  96.56 --     100.00 tb_top 
+  
+  ----------------
+  SCORE  LINE   COND   TOGGLE FSM    BRANCH     
+   96.67 100.00  90.00  96.67 --     100.00 dut 
+    
+    ----------------
+    SCORE  LINE   COND   TOGGLE FSM    BRANCH                 
+    100.00 100.00 --     100.00 --     100.00 u_dual_port_ram 
+     99.30 100.00 --      97.89 --     100.00 u_read_pointer  
+     98.25 100.00 --      94.74 --     100.00 u_sync_r2w      
+     98.25 100.00 --      94.74 --     100.00 u_sync_w2r      
+     98.36 100.00 --      95.07 --     100.00 u_write_pointer 
+  
+  ----------------
+  SCORE  LINE   COND   TOGGLE FSM    BRANCH      
+   97.62 --     --      97.62 --     --     intf 
+

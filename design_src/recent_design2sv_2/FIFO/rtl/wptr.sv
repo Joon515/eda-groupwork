@@ -12,7 +12,7 @@ module wptr #(
     );
 
 /*======================== Parameter and Internal Signal =========================*/
-    localparam int PTR_WIDTH = ADDR_WIDTH + 1
+    localparam int PTR_WIDTH = ADDR_WIDTH + 1;
 
     logic [PTR_WIDTH-1:0] wbin;
     logic [PTR_WIDTH-1:0] wbin_next;

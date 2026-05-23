@@ -13,7 +13,7 @@ module dual_port_ram #(
     );
 
 /*======================== Parameter and Internal Signal =========================*/
-	localparam int ADDR_WIDTH = $clog2(DEPTH)
+	localparam int ADDR_WIDTH = (DEPTH>1)?$clog2(DEPTH):1;
 
     logic [WIDTH-1:0] mem [0:DEPTH-1];
 

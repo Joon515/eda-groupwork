@@ -18,7 +18,7 @@ module async_fifo_top #(
 /*======================== Parameter and Internal Signal =========================*/
 	// kq(debug): 这里必须判断深度是不是1，clog2本质上是算信息熵比特而不是位宽
 	// clog2(s)其中s是状态数，当只有一个状态时，概率100% 所需信息比特为0个
-    localparam int ADDR_WIDTH = (DEPTH==1)?$clog2(DEPTH):1;
+    localparam int ADDR_WIDTH = (DEPTH>1)?$clog2(DEPTH):1;
     localparam int PTR_WIDTH  = ADDR_WIDTH + 1;
     localparam int MEM_DEPTH  = 1 << ADDR_WIDTH;
 

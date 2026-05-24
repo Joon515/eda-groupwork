@@ -1,0 +1,33 @@
+Tests
+
+Total Coverage Summary 
+SCORE  LINE   COND   TOGGLE FSM    BRANCH GROUP  
+100.00 100.00 100.00 100.00 --     100.00 100.00 
+
+
+Total tests in report: 22
+-------------------------------------------------------------------------------
+Data from the following tests was used to generate this report
+simv/fifo_random_test_dp64_fwft0_reg0             
+simv/fifo_boundary_test_dp64_fwft0_reg0           
+simv/fifo_full_empty_toggle_test_dp64_fwft0_reg0  
+simv/fifo_stress_test_dp64_fwft0_reg0             
+simv/fifo_delay_behavior_test_dp64_fwft0_reg0     
+simv/fifo_almost_full_empty_test_dp64_fwft0_reg0  
+simv/fifo_reset_cycle_test_dp64_fwft0_reg0        
+simv/fifo_random_test_dp32_fwft1_reg0             
+simv/fifo_boundary_test_dp32_fwft1_reg0           
+simv/fifo_full_empty_toggle_test_dp32_fwft1_reg0  
+simv/fifo_stress_test_dp32_fwft1_reg0             
+simv/fifo_delay_behavior_test_dp32_fwft1_reg0     
+simv/fifo_almost_full_empty_test_dp32_fwft1_reg0  
+simv/fifo_reset_cycle_test_dp32_fwft1_reg0        
+simv/fifo_random_test_dp128_fwft1_reg1            
+simv/fifo_boundary_test_dp128_fwft1_reg1          
+simv/fifo_full_empty_toggle_test_dp128_fwft1_reg1 
+simv/fifo_stress_test_dp128_fwft1_reg1            
+simv/fifo_delay_behavior_test_dp128_fwft1_reg1    
+simv/fifo_almost_full_empty_test_dp128_fwft1_reg1 
+simv/fifo_fwft_skid_buffer_test_dp128_fwft1_reg1  
+simv/fifo_reset_cycle_test_dp128_fwft1_reg1       
+

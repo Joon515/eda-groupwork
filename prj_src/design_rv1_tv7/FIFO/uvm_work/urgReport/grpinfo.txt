@@ -1,0 +1,870 @@
+Group : fifo_env_pkg::fifo_cov_listener::concurrent_cg
+
+===============================================================================
+Group : fifo_env_pkg::fifo_cov_listener::concurrent_cg
+===============================================================================
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING 
+100.00 100.00    1      100    1        1            64           64            
+
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../uvm_src/fifo_cov_listener.sv
+
+1 Instances:
+
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING NAME                        
+100.00 1      100    1        64           64            tb_top.me.obj.concurrent_cg 
+
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   fifo_env_pkg::fifo_cov_listener::concurrent_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 4        0         4       100.00  
+Crosses   1        0         1       100.00  
+
+
+Variables for Group  fifo_env_pkg::fifo_cov_listener::concurrent_cg
+
+
+VARIABLE     EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_winc_sync 2        0         2       100.00  100  1      1        2                    
+cp_rinc_sync 2        0         2       100.00  100  1      1        2                    
+
+
+Crosses for Group  fifo_env_pkg::fifo_cov_listener::concurrent_cg
+
+
+CROSS            EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_concurrent 1        0         1       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_winc_sync
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_winc_sync
+
+
+Bins
+
+NAME    COUNT AT LEAST STATUS 
+auto[0] 25576 1               
+auto[1] 40843 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rinc_sync
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_rinc_sync
+
+
+Bins
+
+NAME    COUNT AT LEAST STATUS 
+auto[0] 53353 1               
+auto[1] 13088 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_concurrent
+
+
+Samples crossed: cp_winc_sync cp_rinc_sync
+CATEGORY                EXPECTED UNCOVERED COVERED PERCENT MISSING 
+User Defined Cross Bins 1        0         1       100.00          
+
+
+User Defined Cross Bins for cross_concurrent
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+simultaneous_rw 66419 1               
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Group Instance : tb_top.me.obj.concurrent_cg
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Group:
+
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING COMMENT NAME                                           
+100.00 100.00    1      100    1        1            64           64                    fifo_env_pkg::fifo_cov_listener::concurrent_cg 
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group Instance   tb_top.me.obj.concurrent_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 4        0         4       100.00  
+Crosses   1        0         1       100.00  
+
+
+Variables for Group Instance  tb_top.me.obj.concurrent_cg
+
+
+VARIABLE     EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_winc_sync 2        0         2       100.00  100  1      1        2                    
+cp_rinc_sync 2        0         2       100.00  100  1      1        2                    
+
+
+Crosses for Group Instance  tb_top.me.obj.concurrent_cg
+
+
+CROSS            EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_concurrent 1        0         1       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_winc_sync
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_winc_sync
+
+
+Bins
+
+NAME    COUNT AT LEAST STATUS 
+auto[0] 25576 1               
+auto[1] 40843 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rinc_sync
+
+
+CATEGORY                     EXPECTED UNCOVERED COVERED PERCENT 
+Automatically Generated Bins 2        0         2       100.00  
+
+
+Automatically Generated Bins for cp_rinc_sync
+
+
+Bins
+
+NAME    COUNT AT LEAST STATUS 
+auto[0] 53353 1               
+auto[1] 13088 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_concurrent
+
+
+Samples crossed: cp_winc_sync cp_rinc_sync
+CATEGORY                EXPECTED UNCOVERED COVERED PERCENT MISSING 
+User Defined Cross Bins 1        0         1       100.00          
+
+
+User Defined Cross Bins for cross_concurrent
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+simultaneous_rw 66419 1               
+
+
+Group : fifo_env_pkg::fifo_cov_listener::read_cov_cg
+
+===============================================================================
+Group : fifo_env_pkg::fifo_cov_listener::read_cov_cg
+===============================================================================
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING 
+100.00 100.00    1      100    1        1            64           64            
+
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../uvm_src/fifo_cov_listener.sv
+
+1 Instances:
+
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING NAME        
+100.00 1      100    1        64           64            read_cov_cg 
+
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   fifo_env_pkg::fifo_cov_listener::read_cov_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 6        0         6       100.00  
+Crosses   8        0         8       100.00  
+
+
+Variables for Group  fifo_env_pkg::fifo_cov_listener::read_cov_cg
+
+
+VARIABLE         EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_rinc          2        0         2       100.00  100  1      1        0                    
+cp_rempty        2        0         2       100.00  100  1      1        0                    
+cp_ralmost_empty 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group  fifo_env_pkg::fifo_cov_listener::read_cov_cg
+
+
+CROSS                      EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_read_at_empty        4        0         4       100.00  100  1      1        0                     
+cross_read_at_almost_empty 4        0         4       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rinc
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_rinc
+
+
+Bins
+
+NAME     COUNT  AT LEAST STATUS 
+inactive 158461 1               
+active   40839  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rempty
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_rempty
+
+
+Bins
+
+NAME      COUNT  AT LEAST STATUS 
+not_empty 157658 1               
+empty     41664  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_ralmost_empty
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_ralmost_empty
+
+
+Bins
+
+NAME         COUNT  AT LEAST STATUS 
+normal       137357 1               
+almost_empty 61965  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_read_at_empty
+
+
+Samples crossed: cp_rinc cp_rempty
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_read_at_empty
+
+
+Bins
+
+cp_rinc  cp_rempty COUNT  AT LEAST STATUS 
+inactive not_empty 142360 1               
+inactive empty     16101  1               
+active   not_empty 15298  1               
+
+
+User Defined Cross Bins for cross_read_at_empty
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+read_when_empty 25541 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_read_at_almost_empty
+
+
+Samples crossed: cp_rinc cp_ralmost_empty
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_read_at_almost_empty
+
+
+Bins
+
+cp_rinc  cp_ralmost_empty COUNT  AT LEAST STATUS 
+inactive normal           134445 1               
+inactive almost_empty     24016  1               
+active   normal           2912   1               
+
+
+User Defined Cross Bins for cross_read_at_almost_empty
+
+
+Bins
+
+NAME         COUNT AT LEAST STATUS 
+read_when_ae 37927 1               
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Group Instance : read_cov_cg
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Group:
+
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING COMMENT NAME                                         
+100.00 100.00    1      100    1        1            64           64                    fifo_env_pkg::fifo_cov_listener::read_cov_cg 
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group Instance   read_cov_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 6        0         6       100.00  
+Crosses   8        0         8       100.00  
+
+
+Variables for Group Instance  read_cov_cg
+
+
+VARIABLE         EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_rinc          2        0         2       100.00  100  1      1        0                    
+cp_rempty        2        0         2       100.00  100  1      1        0                    
+cp_ralmost_empty 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group Instance  read_cov_cg
+
+
+CROSS                      EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_read_at_empty        4        0         4       100.00  100  1      1        0                     
+cross_read_at_almost_empty 4        0         4       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rinc
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_rinc
+
+
+Bins
+
+NAME     COUNT  AT LEAST STATUS 
+inactive 158461 1               
+active   40839  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_rempty
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_rempty
+
+
+Bins
+
+NAME      COUNT  AT LEAST STATUS 
+not_empty 157658 1               
+empty     41664  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_ralmost_empty
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_ralmost_empty
+
+
+Bins
+
+NAME         COUNT  AT LEAST STATUS 
+normal       137357 1               
+almost_empty 61965  1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_read_at_empty
+
+
+Samples crossed: cp_rinc cp_rempty
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_read_at_empty
+
+
+Bins
+
+cp_rinc  cp_rempty COUNT  AT LEAST STATUS 
+inactive not_empty 142360 1               
+inactive empty     16101  1               
+active   not_empty 15298  1               
+
+
+User Defined Cross Bins for cross_read_at_empty
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+read_when_empty 25541 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_read_at_almost_empty
+
+
+Samples crossed: cp_rinc cp_ralmost_empty
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_read_at_almost_empty
+
+
+Bins
+
+cp_rinc  cp_ralmost_empty COUNT  AT LEAST STATUS 
+inactive normal           134445 1               
+inactive almost_empty     24016  1               
+active   normal           2912   1               
+
+
+User Defined Cross Bins for cross_read_at_almost_empty
+
+
+Bins
+
+NAME         COUNT AT LEAST STATUS 
+read_when_ae 37927 1               
+
+
+Group : fifo_env_pkg::fifo_cov_listener::write_cov_cg
+
+===============================================================================
+Group : fifo_env_pkg::fifo_cov_listener::write_cov_cg
+===============================================================================
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING 
+100.00 100.00    1      100    1        1            64           64            
+
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../uvm_src/fifo_cov_listener.sv
+
+1 Instances:
+
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING NAME         
+100.00 1      100    1        64           64            write_cov_cg 
+
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group   fifo_env_pkg::fifo_cov_listener::write_cov_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 6        0         6       100.00  
+Crosses   8        0         8       100.00  
+
+
+Variables for Group  fifo_env_pkg::fifo_cov_listener::write_cov_cg
+
+
+VARIABLE        EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_winc         2        0         2       100.00  100  1      1        0                    
+cp_wfull        2        0         2       100.00  100  1      1        0                    
+cp_walmost_full 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group  fifo_env_pkg::fifo_cov_listener::write_cov_cg
+
+
+CROSS                      EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_write_at_full        4        0         4       100.00  100  1      1        0                     
+cross_write_at_almost_full 4        0         4       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_winc
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_winc
+
+
+Bins
+
+NAME     COUNT AT LEAST STATUS 
+inactive 25576 1               
+active   40843 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wfull
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_wfull
+
+
+Bins
+
+NAME     COUNT AT LEAST STATUS 
+not_full 28747 1               
+full     37694 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_walmost_full
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_walmost_full
+
+
+Bins
+
+NAME        COUNT AT LEAST STATUS 
+normal      28357 1               
+almost_full 38084 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_write_at_full
+
+
+Samples crossed: cp_winc cp_wfull
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_write_at_full
+
+
+Bins
+
+cp_winc  cp_wfull COUNT AT LEAST STATUS 
+inactive not_full 12023 1               
+inactive full     13553 1               
+active   not_full 16702 1               
+
+
+User Defined Cross Bins for cross_write_at_full
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+write_when_full 24141 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_write_at_almost_full
+
+
+Samples crossed: cp_winc cp_walmost_full
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_write_at_almost_full
+
+
+Bins
+
+cp_winc  cp_walmost_full COUNT AT LEAST STATUS 
+inactive normal          11789 1               
+inactive almost_full     13787 1               
+active   normal          16546 1               
+
+
+User Defined Cross Bins for cross_write_at_almost_full
+
+
+Bins
+
+NAME          COUNT AT LEAST STATUS 
+write_when_af 24297 1               
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Group Instance : write_cov_cg
+===============================================================================
+SCORE  WEIGHT GOAL   AT LEAST AUTO BIN MAX PRINT MISSING 
+100.00 1      100    1        64           64            
+
+
+Group:
+
+SCORE  INSTANCES WEIGHT GOAL   AT LEAST PER INSTANCE AUTO BIN MAX PRINT MISSING COMMENT NAME                                          
+100.00 100.00    1      100    1        1            64           64                    fifo_env_pkg::fifo_cov_listener::write_cov_cg 
+
+
+
+-------------------------------------------------------------------------------
+
+Summary for Group Instance   write_cov_cg
+
+
+
+CATEGORY  EXPECTED UNCOVERED COVERED PERCENT 
+Variables 6        0         6       100.00  
+Crosses   8        0         8       100.00  
+
+
+Variables for Group Instance  write_cov_cg
+
+
+VARIABLE        EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST AUTO BIN MAX COMMENT 
+cp_winc         2        0         2       100.00  100  1      1        0                    
+cp_wfull        2        0         2       100.00  100  1      1        0                    
+cp_walmost_full 2        0         2       100.00  100  1      1        0                    
+
+
+Crosses for Group Instance  write_cov_cg
+
+
+CROSS                      EXPECTED UNCOVERED COVERED PERCENT GOAL WEIGHT AT LEAST PRINT MISSING COMMENT 
+cross_write_at_full        4        0         4       100.00  100  1      1        0                     
+cross_write_at_almost_full 4        0         4       100.00  100  1      1        0                     
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_winc
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_winc
+
+
+Bins
+
+NAME     COUNT AT LEAST STATUS 
+inactive 25576 1               
+active   40843 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_wfull
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_wfull
+
+
+Bins
+
+NAME     COUNT AT LEAST STATUS 
+not_full 28747 1               
+full     37694 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Variable cp_walmost_full
+
+
+CATEGORY          EXPECTED UNCOVERED COVERED PERCENT 
+User Defined Bins 2        0         2       100.00  
+
+
+User Defined Bins for cp_walmost_full
+
+
+Bins
+
+NAME        COUNT AT LEAST STATUS 
+normal      28357 1               
+almost_full 38084 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_write_at_full
+
+
+Samples crossed: cp_winc cp_wfull
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_write_at_full
+
+
+Bins
+
+cp_winc  cp_wfull COUNT AT LEAST STATUS 
+inactive not_full 12023 1               
+inactive full     13553 1               
+active   not_full 16702 1               
+
+
+User Defined Cross Bins for cross_write_at_full
+
+
+Bins
+
+NAME            COUNT AT LEAST STATUS 
+write_when_full 24141 1               
+
+
+-------------------------------------------------------------------------------
+
+Summary for Cross cross_write_at_almost_full
+
+
+Samples crossed: cp_winc cp_walmost_full
+CATEGORY                           EXPECTED UNCOVERED COVERED PERCENT MISSING 
+TOTAL                              4        0         4       100.00          
+Automatically Generated Cross Bins 3        0         3       100.00          
+User Defined Cross Bins            1        0         1       100.00          
+
+
+Automatically Generated Cross Bins for cross_write_at_almost_full
+
+
+Bins
+
+cp_winc  cp_walmost_full COUNT AT LEAST STATUS 
+inactive normal          11789 1               
+inactive almost_full     13787 1               
+active   normal          16546 1               
+
+
+User Defined Cross Bins for cross_write_at_almost_full
+
+
+Bins
+
+NAME          COUNT AT LEAST STATUS 
+write_when_af 24297 1               
+
+

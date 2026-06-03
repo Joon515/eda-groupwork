@@ -1,0 +1,47 @@
+make: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make sim MODULE= TESTCASE= COCOTB_TEST_MODULES="test_async_fifo" COCOTB_TEST_FILTER="FifoSmokeTest$"
+make[1]: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+rm -f results.xml
+"make" -f Makefile results.xml
+make[2]: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+mkdir -p sim_build
+/opt/oss-cad-suite/bin/verilator -cc --exe -Mdir sim_build --top-module async_fifo_top --timescale 1ns/1ps --vpi --public-flat-rw --prefix Vtop -o Vtop -LDFLAGS "-Wl,-rpath,/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/libs -L/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/libs -lcocotbvpi_verilator" --timing --trace -GDEPTH=16 -GWIDTH=16 -GFWFT_EN=0 -GOUT_REG_EN=0 -GSYNC_STAGES=2 -GALMOST_FULL_EN=0 -GALMOST_FULL_VAL=4 -GALMOST_EMPTY_EN=0 -GALMOST_EMPTY_VAL=4 ../rtl_src/fifo_cfg_pkg.sv ../rtl_src/sync_gray.sv ../rtl_src/dual_port_ram.sv ../rtl_src/wptr.sv ../rtl_src/rptr.sv ../rtl_src/async_fifo_top.sv /home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/share/lib/verilator/verilator.cpp
+- V e r i l a t i o n   R e p o r t: Verilator 5.047 devel rev v5.046-68-g0019c1224 (mod)
+- Verilator: Built from 0.141 MB sources in 7 modules, into 0.161 MB in 9 C++ files needing 0.000 MB
+- Verilator: Walltime 0.012 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.012 s on 1 threads; allocated 21.242 MB
+make -C sim_build  -f Vtop.mk
+make[3]: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work/sim_build'
+g++  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -Os  -c -o verilator.o /home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/share/lib/verilator/verilator.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /opt/oss-cad-suite/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_dpi.o /opt/oss-cad-suite/share/verilator/include/verilated_dpi.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_vpi.o /opt/oss-cad-suite/share/verilator/include/verilated_vpi.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_vcd_c.o /opt/oss-cad-suite/share/verilator/include/verilated_vcd_c.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /opt/oss-cad-suite/share/verilator/include/verilated_threads.cpp
+python3 /opt/oss-cad-suite/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop.cpp Vtop___024root__0.cpp Vtop__Dpi.cpp Vtop__Trace__0.cpp Vtop___024root__Slow.cpp Vtop___024root__0__Slow.cpp Vtop__Syms__Slow.cpp Vtop__Trace__0__Slow.cpp Vtop__TraceDecls__0__Slow.cpp > Vtop__ALL.cpp
+g++ -Os  -I.  -MMD -I/opt/oss-cad-suite/share/verilator/include -I/opt/oss-cad-suite/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=1 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=1 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o Vtop__ALL.o Vtop__ALL.cpp
+g++    verilator.o verilated.o verilated_dpi.o verilated_vpi.o verilated_vcd_c.o verilated_threads.o Vtop__ALL.a   -Wl,-rpath,/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/libs -L/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb/libs -lcocotbvpi_verilator  -pthread -lpthread -latomic   -o Vtop
+rm Vtop__ALL.verilator_deplist.tmp
+make[3]: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work/sim_build'
+rm -f results.xml
+COCOTB_TEST_MODULES=test_async_fifo COCOTB_TESTCASE= COCOTB_TEST_FILTER=FifoSmokeTest$ COCOTB_TOPLEVEL=async_fifo_top TOPLEVEL_LANG=verilog \
+         sim_build/Vtop  --timing --trace -GDEPTH=16 -GWIDTH=16 -GFWFT_EN=0 -GOUT_REG_EN=0 -GSYNC_STAGES=2 -GALMOST_FULL_EN=0 -GALMOST_FULL_VAL=4 -GALMOST_EMPTY_EN=0 -GALMOST_EMPTY_VAL=4   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.11.9 interpreter at /home/joon/miniconda3/envs/eda-pyuvm-fifo/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.047 devel
+     0.00ns INFO     cocotb                             Seeding Python random module with 1780387319
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_async_fifo.FifoSmokeTest (1/1)
+     0.00ns INFO     cocotb.regression                  test_async_fifo.FifoSmokeTest passed
+     0.00ns INFO     cocotb.regression                  ***************************************************************************************
+                                                        ** TEST                           STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        ***************************************************************************************
+                                                        ** test_async_fifo.FifoSmokeTest   PASS           0.00           0.00          0.00  **
+                                                        ***************************************************************************************
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                   0.00           0.00          0.00  **
+                                                        ***************************************************************************************
+- :0: Verilog $finish
+make[2]: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make[1]: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'

@@ -1,0 +1,8 @@
+COMMAND: conda run import guard
+2.0.1
+
+COMMAND: verilator --version
+Verilator 5.047 devel rev v5.046-68-g0019c1224 (mod)
+
+COMMAND: forbidden dependency grep
+No forbidden simulator dependencies in environment.yml

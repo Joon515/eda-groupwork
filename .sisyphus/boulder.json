@@ -1,0 +1,94 @@
+{
+  "active_plan": "/home/joon/project/eda-groupwork/.sisyphus/plans/pyuvm-fifo-platform.md",
+  "started_at": "2026-06-02T07:47:43.763Z",
+  "session_ids": [
+    "ses_178caf1d5ffe058Fs0AQaIYqnT",
+    "ses_178b214d8fferIoTcRvQ0ObqZq",
+    "ses_178b2141fffe2mJ823KAPMBbU7",
+    "ses_178b213f9ffeax0RhyDZzEAE13",
+    "ses_178b21392ffeDTuu2nE0CuM3Gt"
+  ],
+  "session_origins": {
+    "ses_178caf1d5ffe058Fs0AQaIYqnT": "direct",
+    "ses_178b214d8fferIoTcRvQ0ObqZq": "appended",
+    "ses_178b2141fffe2mJ823KAPMBbU7": "appended",
+    "ses_178b213f9ffeax0RhyDZzEAE13": "appended",
+    "ses_178b21392ffeDTuu2nE0CuM3Gt": "appended"
+  },
+  "plan_name": "pyuvm-fifo-platform",
+  "agent": "atlas",
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "Create conda environment manifest and Python dependency checks",
+      "session_id": "ses_178b06e95ffeWR6LjDMkHorikt",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-06-02T07:52:44.394Z"
+    },
+    "todo:2": {
+      "task_key": "todo:2",
+      "task_label": "2",
+      "task_title": "Add cocotb/Verilator Makefile and smoke elaboration test",
+      "session_id": "ses_178aabf67ffe9fWOwtacFOV4xh",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:01:02.290Z"
+    },
+    "todo:3": {
+      "task_key": "todo:3",
+      "task_label": "3",
+      "task_title": "Build pyuvm FIFO package, clocks, reset helper, and BFMs",
+      "session_id": "ses_178a37b1affebFx07B5eqqtMlv",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:07:30.254Z"
+    },
+    "todo:4": {
+      "task_key": "todo:4",
+      "task_label": "4",
+      "task_title": "Add reset, single write/read, and delay behavior pyuvm tests",
+      "session_id": "ses_1789db081ffeBbYoQ6ypvPhcgn",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:13:24.679Z"
+    },
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "Add Python scoreboard and FIFO ordering tests",
+      "session_id": "ses_1789805adffeoWxcaupTur2gcZ",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:19:44.060Z"
+    },
+    "todo:6": {
+      "task_key": "todo:6",
+      "task_label": "6",
+      "task_title": "Add boundary, full/empty, and almost flag tests",
+      "session_id": "ses_1788eab29ffeQhGH8fmlz3kTEO",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:38:16.301Z"
+    },
+    "todo:7": {
+      "task_key": "todo:7",
+      "task_label": "7",
+      "task_title": "Add async simultaneous, random, stress, and FWFT/OUT_REG mode tests",
+      "session_id": "ses_178826a11ffeEnyvmnIrMqJRox",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-06-02T08:49:56.857Z"
+    },
+    "todo:8": {
+      "task_key": "todo:8",
+      "task_label": "8",
+      "task_title": "Write Chinese pyuvm learning guide and update documentation index",
+      "session_id": "ses_178227890ffealoeTt0R0xHW3r",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-06-02T10:55:03.460Z"
+    }
+  }
+}

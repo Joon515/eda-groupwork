@@ -1,0 +1,2 @@
+PASS: prj_src/design_rv1_tv7/FIFO/doc/PYUVM_GUIDE.md exists and contains required pyuvm guide content.
+PASS: checked 40 required strings; line_count=432.

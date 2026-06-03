@@ -1,0 +1,29 @@
+make: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make sim MODULE= TESTCASE= SIM_BUILD="sim_build/verilator-d16-w16-fw0-out0-sync2-af0-afv4-ae0-aev4" COCOTB_TEST_MODULES="test_async_fifo" COCOTB_TEST_FILTER="FifoEmptyReadProtectionTest$" COCOTB_RESULTS_FILE="results-FifoEmptyReadProtectionTest.xml"
+make[1]: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+rm -f results-FifoEmptyReadProtectionTest.xml
+"make" -f Makefile results-FifoEmptyReadProtectionTest.xml
+make[2]: Entering directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+rm -f results-FifoEmptyReadProtectionTest.xml
+COCOTB_TEST_MODULES=test_async_fifo COCOTB_TESTCASE= COCOTB_TEST_FILTER=FifoEmptyReadProtectionTest$ COCOTB_TOPLEVEL=async_fifo_top TOPLEVEL_LANG=verilog \
+         sim_build/verilator-d16-w16-fw0-out0-sync2-af0-afv4-ae0-aev4/Vtop  --timing --trace -GDEPTH=16 -GWIDTH=16 -GFWFT_EN=0 -GOUT_REG_EN=0 -GSYNC_STAGES=2 -GALMOST_FULL_EN=0 -GALMOST_FULL_VAL=4 -GALMOST_EMPTY_EN=0 -GALMOST_EMPTY_VAL=4   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.11.9 interpreter at /home/joon/miniconda3/envs/eda-pyuvm-fifo/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.047 devel
+     0.00ns INFO     cocotb                             Seeding Python random module with 1780389402
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/cocotb
+     0.00ns INFO     cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_async_fifo.FifoEmptyReadProtectionTest (1/1)
+   238.00ns INFO     cocotb.regression                  test_async_fifo.FifoEmptyReadProtectionTest passed
+   238.00ns INFO     cocotb.regression                  *****************************************************************************************************
+                                                        ** TEST                                         STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        *****************************************************************************************************
+                                                        ** test_async_fifo.FifoEmptyReadProtectionTest   PASS         238.00           0.00     311270.46  **
+                                                        *****************************************************************************************************
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                               238.00           0.02      12567.12  **
+                                                        *****************************************************************************************************
+- :0: Verilog $finish
+make[2]: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make[1]: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'
+make: Leaving directory '/home/joon/project/eda-groupwork/prj_src/design_rv1_tv7/FIFO/pyuvm_work'

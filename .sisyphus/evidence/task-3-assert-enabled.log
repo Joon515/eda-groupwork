@@ -1,0 +1,3 @@
+import-ok
+asserts-enabled
+python -O optimization-detected

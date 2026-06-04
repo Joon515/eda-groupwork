@@ -1,0 +1,1963 @@
+===============================================================================
+Module : async_fifo_top
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+ 97.50 100.00  90.00 100.00 --     100.00 
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../rtl_src/async_fifo_top.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME          
+100.00 100.00 100.00 100.00 --     100.00 tb_top.dut(x) 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : async_fifo_top
+
+             Line No.   Total   Covered  Percent
+TOTAL                       23       23   100.00
+ALWAYS             66        3        3   100.00
+ALWAYS             80        3        3   100.00
+ALWAYS            257       17       17   100.00
+
+65                                      always_ff @(posedge wclk or negedge wrst) begin
+66         2/2                              if (!wrst) wrst_sync_reg <= '0;
+67         1/1                              else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+68                                      end
+69                                      assign wrst_internal = wrst_sync_reg[1];
+70                                  end else begin : g_wrst_ah
+71                                      always_ff @(posedge wclk or posedge wrst) begin
+72                                          if (wrst)  wrst_sync_reg <= '0;
+73                                          else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+74                                      end
+75                                      assign wrst_internal = ~wrst_sync_reg[1]; 
+76                                  end
+77                      
+78                                  if (RST_POLARITY == ACTIVE_LOW) begin : g_rrst_al
+79                                      always_ff @(posedge rclk or negedge rrst) begin
+80         2/2                              if (!rrst) rrst_sync_reg <= '0;
+81         1/1                              else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+82                                      end
+83                                      assign rrst_internal = rrst_sync_reg[1];
+84                                  end else begin : g_rrst_ah
+85                                      always_ff @(posedge rclk or posedge rrst) begin
+86                                          if (rrst)  rrst_sync_reg <= '0;
+87                                          else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+88                                      end
+89                                      assign rrst_internal = ~rrst_sync_reg[1];
+90                                  end
+91                              end else begin : g_rst_direct
+92                                  assign wrst_internal = wrst;
+93                                  assign rrst_internal = rrst;
+94                              end
+95                          endgenerate
+96                      
+97                      /*================================== Instantiation ===============================*/
+98                          
+99                          // 读指针同步至写时钟域
+100                         sync_gray #(
+101                             .WIDTH(PTR_WIDTH),
+102                             .STAGES(SYNC_STAGES),
+103                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+104                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY)
+105                         ) u_sync_r2w (
+106                             .clk(wclk),
+107                             .rst(wrst_internal),
+108                             .din(rptr_gray),
+109                             .dout(rptr_gray_sync_w2)
+110                         );
+111                     
+112                         // 写指针同步至读时钟域
+113                         sync_gray #(
+114                             .WIDTH(PTR_WIDTH),
+115                             .STAGES(SYNC_STAGES),
+116                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+117                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY)
+118                         ) u_sync_w2r (
+119                             .clk(rclk),
+120                             .rst(rrst_internal),
+121                             .din(wptr_gray),
+122                             .dout(wptr_gray_sync_r2)
+123                         );
+124                     
+125                         // 写控制与指针
+126                         wptr #(
+127                             .ADDR_WIDTH(ADDR_WIDTH),
+128                             .DEPTH(DEPTH),
+129                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+130                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY),
+131                             .ALMOST_FULL_EN(ALMOST_FULL_EN),
+132                             .ALMOST_FULL_VAL(ALMOST_FULL_VAL)
+133                         ) u_write_pointer (
+134                             .wclk(wclk),
+135                             .wrst(wrst_internal),
+136                             .winc(winc),
+137                             .rgray_sync(rptr_gray_sync_w2),
+138                             .waddr(waddr),
+139                             .wgray(wptr_gray),
+140                             .wfull(wfull),
+141                             .walmost_full(walmost_full)
+142                         );
+143                     
+144                         // 读控制与指针
+145                         rptr #(
+146                             .ADDR_WIDTH(ADDR_WIDTH),
+147                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+148                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY),
+149                             .ALMOST_EMPTY_EN(ALMOST_EMPTY_EN),
+150                             .ALMOST_EMPTY_VAL(ALMOST_EMPTY_VAL)
+151                         ) u_read_pointer (
+152                             .rclk(rclk),
+153                             .rrst(rrst_internal),
+154                             .rinc(rinc_internal),
+155                             .wgray_sync(wptr_gray_sync_r2),
+156                             .raddr(raddr),
+157                             .rgray(rptr_gray),
+158                             .rempty(rempty_raw),
+159                             .ralmost_empty(ralmost_empty)
+160                         );
+161                     
+162                         // 内存实例化
+163                         dual_port_ram #(
+164                             .WIDTH(WIDTH),
+165                             .DEPTH(MEM_DEPTH)
+166                         ) u_dual_port_ram (
+167                             .wclk(wclk),
+168                             .waddr(waddr),
+169                             .winc(winc && !wfull),
+170                             .wdata(wdata),
+171                             .raddr(raddr),
+172                             .rdata(ram_rdata)
+173                         );
+174                     
+175                     /*============================ FWFT & Output Register Logic ============================*/
+176                         generate
+177                             // ---------------------------------------------------------------------
+178                             // 模式 0: 标准模式 (FWFT=0, OUT_REG=0) -> 读使能后 1 拍输出
+179                             // ---------------------------------------------------------------------
+180                             if (!FWFT_EN && !OUT_REG_EN) begin : g_std_mode
+181                                 assign rinc_internal = rinc;
+182                                 assign rempty        = rempty_raw;
+183                                 
+184                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_out_async
+185                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+186                                         if (rst_cond_r) rdata <= '0;
+187                                         else if (rinc)  rdata <= ram_rdata;
+188                                     end
+189                                 end else begin : g_out_sync
+190                                     always_ff @(posedge rclk) begin
+191                                         if (rst_cond_r) rdata <= '0;
+192                                         else if (rinc)  rdata <= ram_rdata;
+193                                     end
+194                                 end
+195                             end
+196                     
+197                             // ---------------------------------------------------------------------
+198                             // 模式 1: 带输出寄存器的标准模式 (FWFT=0, OUT_REG=1) -> 读使能后 2 拍输出
+199                             // ---------------------------------------------------------------------
+200                             else if (!FWFT_EN && OUT_REG_EN) begin : g_std_reg_mode
+201                                 assign rinc_internal = rinc;
+202                                 assign rempty        = rempty_raw;
+203                                 logic [WIDTH-1:0] rdata_stage1;
+204                     
+205                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_out_reg_async
+206                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+207                                         if (rst_cond_r) begin
+208                                             rdata_stage1 <= '0;
+209                                             rdata        <= '0;
+210                                         end else begin
+211                                             if (rinc) rdata_stage1 <= ram_rdata;
+212                                             rdata <= rdata_stage1;
+213                                         end
+214                                     end
+215                                 end else begin : g_out_reg_sync
+216                                     always_ff @(posedge rclk) begin
+217                                         if (rst_cond_r) begin
+218                                             rdata_stage1 <= '0;
+219                                             rdata        <= '0;
+220                                         end else begin
+221                                             if (rinc) rdata_stage1 <= ram_rdata;
+222                                             rdata <= rdata_stage1;
+223                                         end
+224                                     end
+225                                 end
+226                             end
+227                     
+228                             // ---------------------------------------------------------------------
+229                             // 模式 2: 头优先模式 (FWFT=1, OUT_REG=0) -> 0 拍输出（数据随 empty 自动呈现）
+230                             // ---------------------------------------------------------------------
+231                             else if (FWFT_EN && !OUT_REG_EN) begin : g_fwft_direct_mode
+232                                 // 在直通 FWFT 中，只要外部有读使能且 FIFO 非空，内部就对 RAM 递增
+233                                 assign rinc_internal = rinc && !rempty_raw;
+234                                 assign rempty        = rempty_raw;
+235                                 assign rdata         = ram_rdata;
+236                             end
+237                     
+238                             // ---------------------------------------------------------------------
+239                             // 模式 3: 带输出寄存器的 FWFT 模式 (FWFT=1, OUT_REG=1) -> 寄存器输出 & 头优先
+240                             // ---------------------------------------------------------------------
+241                             else if (FWFT_EN && OUT_REG_EN) begin : g_fwft_reg_mode
+242                                 // 使用经典的 Skid Buffer 架构
+243                                 logic [WIDTH-1:0] rdata_reg;
+244                                 logic             rdata_valid;
+245                                 
+246                                 // 当外部不读，但内部 RAM 输出了新数据时，使用一个暂存寄存器暂存
+247                                 logic [WIDTH-1:0] skid_reg;
+248                                 logic             skid_valid;
+249                     
+250                                 assign rempty = !rdata_valid;
+251                                 
+252                                 // 只要输出寄存器空，或者外部正在读出，内部就允许向 RAM 索要新数据
+253                                 assign rinc_internal = !rempty_raw && (!rdata_valid || rinc || !skid_valid);
+254                     
+255                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_skid_async
+256                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+257        1/1                              if (rst_cond_r) begin
+258        1/1                                  rdata_reg   <= '0;
+259        1/1                                  rdata_valid <= 1'b0;
+260        1/1                                  skid_reg    <= '0;
+261        1/1                                  skid_valid  <= 1'b0;
+262                                         end else begin
+263                                             // 状态转移与数据寄存
+264        1/1                                  if (rinc_internal) begin
+265        1/1                                      if (rdata_valid && !rinc) begin
+266                                                     // 外部不读，但内部读了，数据滑入 skid_reg
+267        1/1                                          skid_reg   <= ram_rdata;
+268        1/1                                          skid_valid <= 1'b1;
+269                                                 end else begin
+270                                                     // 正常读出，数据直接进入主输出寄存器
+271        1/1                                          rdata_reg   <= ram_rdata;
+272        1/1                                          rdata_valid <= 1'b1;
+273                                                 end
+274        1/1                                  end else if (rinc) begin
+275        1/1                                      if (skid_valid) begin
+276                                                     // 外部读，且 skid 中有数据，将 skid 数据移入主寄存器
+277        1/1                                          rdata_reg   <= skid_reg;
+278        1/1                                          rdata_valid <= 1'b1;
+279        1/1                                          skid_valid  <= 1'b0;
+280                                                 end else begin
+281        1/1                                          rdata_valid <= 1'b0;
+282                                                 end
+283                                             end
+                        MISSING_ELSE
+
+-------------------------------------------------------------------------------
+Cond Coverage for Module : async_fifo_top
+
+               Total   Covered  Percent
+Conditions         10        9    90.00
+Logical            10        9    90.00
+Non-Logical         0        0
+Event               0        0
+
+ LINE       265
+ EXPRESSION (g_fwft_reg_mode.rdata_valid && ((!rinc)))
+             -------------1-------------    ----2----
+
+-1- -2- Status
+ 0   1  Covered
+ 1   0  Covered
+ 1   1  Covered
+
+ LINE       253
+ EXPRESSION (((!rempty_raw)) && (((!g_fwft_reg_mode.rdata_valid)) || rinc || ((!g_fwft_reg_mode.skid_valid))))
+             -------1-------    --------------------------------------2--------------------------------------
+
+-1- -2- Status
+ 0   1  Covered
+ 1   0  Covered
+ 1   1  Covered
+
+ LINE       253
+ SUB-EXPRESSION (((!g_fwft_reg_mode.rdata_valid)) || rinc || ((!g_fwft_reg_mode.skid_valid)))
+                 ----------------1---------------    --2-    ---------------3---------------
+
+-1- -2- -3- Status
+ 0   0   0  Covered
+ 0   0   1  Covered
+ 0   1   0  Covered
+ 1   0   0  Not Covered
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : async_fifo_top
+                Total Covered Percent 
+Totals          30    30      100.00  
+Total Bits      294   294     100.00  
+Total Bits 0->1 147   147     100.00  
+Total Bits 1->0 147   147     100.00  
+
+                            
+Ports          12 12 100.00 
+Port Bits      84 84 100.00 
+Port Bits 0->1 42 42 100.00 
+Port Bits 1->0 42 42 100.00 
+
+                                
+Signals          18  18  100.00 
+Signal Bits      210 210 100.00 
+Signal Bits 0->1 105 105 100.00 
+Signal Bits 1->0 105 105 100.00 
+
+Port Details
+              Toggle Toggle 1->0 Toggle 0->1 Direction 
+wclk          Yes    Yes         Yes         INPUT     
+wrst          Yes    Yes         Yes         INPUT     
+winc          Yes    Yes         Yes         INPUT     
+wdata[15:0]   Yes    Yes         Yes         INPUT     
+wfull         Yes    Yes         Yes         OUTPUT    
+walmost_full  Yes    Yes         Yes         OUTPUT    
+rclk          Yes    Yes         Yes         INPUT     
+rrst          Yes    Yes         Yes         INPUT     
+rinc          Yes    Yes         Yes         INPUT     
+rdata[15:0]   Yes    Yes         Yes         OUTPUT    
+rempty        Yes    Yes         Yes         OUTPUT    
+ralmost_empty Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+                                Toggle Toggle 1->0 Toggle 0->1 
+wrst_internal                   Yes    Yes         Yes         
+rrst_internal                   Yes    Yes         Yes         
+rst_cond_r                      Yes    Yes         Yes         
+wptr_gray[7:0]                  Yes    Yes         Yes         
+rptr_gray[7:0]                  Yes    Yes         Yes         
+rptr_gray_sync_w2[7:0]          Yes    Yes         Yes         
+wptr_gray_sync_r2[7:0]          Yes    Yes         Yes         
+waddr[6:0]                      Yes    Yes         Yes         
+raddr[6:0]                      Yes    Yes         Yes         
+rinc_internal                   Yes    Yes         Yes         
+rempty_raw                      Yes    Yes         Yes         
+ram_rdata[15:0]                 Yes    Yes         Yes         
+g_rst_bridge.wrst_sync_reg[1:0] Yes    Yes         Yes         
+g_rst_bridge.rrst_sync_reg[1:0] Yes    Yes         Yes         
+g_fwft_reg_mode.rdata_reg[15:0] Yes    Yes         Yes         
+g_fwft_reg_mode.rdata_valid     Yes    Yes         Yes         
+g_fwft_reg_mode.skid_reg[15:0]  Yes    Yes         Yes         
+g_fwft_reg_mode.skid_valid      Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Module : async_fifo_top
+         Line No. Total Covered Percent 
+Branches          10    10      100.00  
+IF       66       2     2       100.00  
+IF       80       2     2       100.00  
+IF       257      6     6       100.00  
+
+
+66                             if (!wrst) wrst_sync_reg <= '0;
+                               -1-  
+                               ==>
+67                             else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+80                             if (!rrst) rrst_sync_reg <= '0;
+                               -1-  
+                               ==>
+81                             else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+257                            if (rst_cond_r) begin
+                               -1-  
+258                                rdata_reg   <= '0;
+                                   ==>
+259                                rdata_valid <= 1'b0;
+260                                skid_reg    <= '0;
+261                                skid_valid  <= 1'b0;
+262                            end else begin
+263                                // 状态转移与数据寄存
+264                                if (rinc_internal) begin
+                                   -2-  
+265                                    if (rdata_valid && !rinc) begin
+                                       -3-  
+266                                        // 外部不读，但内部读了，数据滑入 skid_reg
+267                                        skid_reg   <= ram_rdata;
+                                           ==>
+268                                        skid_valid <= 1'b1;
+269                                    end else begin
+270                                        // 正常读出，数据直接进入主输出寄存器
+271                                        rdata_reg   <= ram_rdata;
+                                           ==>
+272                                        rdata_valid <= 1'b1;
+273                                    end
+274                                end else if (rinc) begin
+                                            -4-  
+275                                    if (skid_valid) begin
+                                       -5-  
+276                                        // 外部读，且 skid 中有数据，将 skid 数据移入主寄存器
+277                                        rdata_reg   <= skid_reg;
+                                           ==>
+278                                        rdata_valid <= 1'b1;
+279                                        skid_valid  <= 1'b0;
+280                                    end else begin
+281                                        rdata_valid <= 1'b0;
+                                           ==>
+282                                    end
+283                                end
+                                   MISSING_ELSE
+                                   ==>
+
+Branches:
+
+-1- -2- -3- -4- -5- Status  
+1   -   -   -   -   Covered 
+0   1   1   -   -   Covered 
+0   1   0   -   -   Covered 
+0   0   -   1   1   Covered 
+0   0   -   1   0   Covered 
+0   0   -   0   -   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut(x)
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 100.00 100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 100.00 100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME           
+ 97.50 100.00  90.00 100.00 --     100.00 async_fifo_top 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 --     100.00 --     --     tb_top 
+
+
+Subtrees :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME            
+100.00 100.00 --     100.00 --     100.00 u_dual_port_ram 
+100.00 100.00 --     100.00 --     100.00 u_read_pointer  
+100.00 100.00 --     100.00 --     100.00 u_sync_r2w      
+100.00 100.00 --     100.00 --     100.00 u_sync_w2r      
+100.00 100.00 --     100.00 --     100.00 u_write_pointer 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Instance : tb_top.dut(x)
+
+             Line No.   Total   Covered  Percent
+TOTAL                       23       23   100.00
+ALWAYS             66        3        3   100.00
+ALWAYS             80        3        3   100.00
+ALWAYS            257       17       17   100.00
+
+65                                      always_ff @(posedge wclk or negedge wrst) begin
+66         2/2                              if (!wrst) wrst_sync_reg <= '0;
+67         1/1                              else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+68                                      end
+69                                      assign wrst_internal = wrst_sync_reg[1];
+70                                  end else begin : g_wrst_ah
+71                                      always_ff @(posedge wclk or posedge wrst) begin
+72                                          if (wrst)  wrst_sync_reg <= '0;
+73                                          else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+74                                      end
+75                                      assign wrst_internal = ~wrst_sync_reg[1]; 
+76                                  end
+77                      
+78                                  if (RST_POLARITY == ACTIVE_LOW) begin : g_rrst_al
+79                                      always_ff @(posedge rclk or negedge rrst) begin
+80         2/2                              if (!rrst) rrst_sync_reg <= '0;
+81         1/1                              else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+82                                      end
+83                                      assign rrst_internal = rrst_sync_reg[1];
+84                                  end else begin : g_rrst_ah
+85                                      always_ff @(posedge rclk or posedge rrst) begin
+86                                          if (rrst)  rrst_sync_reg <= '0;
+87                                          else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+88                                      end
+89                                      assign rrst_internal = ~rrst_sync_reg[1];
+90                                  end
+91                              end else begin : g_rst_direct
+92                                  assign wrst_internal = wrst;
+93                                  assign rrst_internal = rrst;
+94                              end
+95                          endgenerate
+96                      
+97                      /*================================== Instantiation ===============================*/
+98                          
+99                          // 读指针同步至写时钟域
+100                         sync_gray #(
+101                             .WIDTH(PTR_WIDTH),
+102                             .STAGES(SYNC_STAGES),
+103                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+104                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY)
+105                         ) u_sync_r2w (
+106                             .clk(wclk),
+107                             .rst(wrst_internal),
+108                             .din(rptr_gray),
+109                             .dout(rptr_gray_sync_w2)
+110                         );
+111                     
+112                         // 写指针同步至读时钟域
+113                         sync_gray #(
+114                             .WIDTH(PTR_WIDTH),
+115                             .STAGES(SYNC_STAGES),
+116                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+117                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY)
+118                         ) u_sync_w2r (
+119                             .clk(rclk),
+120                             .rst(rrst_internal),
+121                             .din(wptr_gray),
+122                             .dout(wptr_gray_sync_r2)
+123                         );
+124                     
+125                         // 写控制与指针
+126                         wptr #(
+127                             .ADDR_WIDTH(ADDR_WIDTH),
+128                             .DEPTH(DEPTH),
+129                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+130                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY),
+131                             .ALMOST_FULL_EN(ALMOST_FULL_EN),
+132                             .ALMOST_FULL_VAL(ALMOST_FULL_VAL)
+133                         ) u_write_pointer (
+134                             .wclk(wclk),
+135                             .wrst(wrst_internal),
+136                             .winc(winc),
+137                             .rgray_sync(rptr_gray_sync_w2),
+138                             .waddr(waddr),
+139                             .wgray(wptr_gray),
+140                             .wfull(wfull),
+141                             .walmost_full(walmost_full)
+142                         );
+143                     
+144                         // 读控制与指针
+145                         rptr #(
+146                             .ADDR_WIDTH(ADDR_WIDTH),
+147                             .RST_TYPE(RST_TYPE == ASYNC_SYNC_RELEASE ? ASYNC_RST : RST_TYPE),
+148                             .RST_POLARITY(RST_TYPE == ASYNC_SYNC_RELEASE ? ACTIVE_LOW : RST_POLARITY),
+149                             .ALMOST_EMPTY_EN(ALMOST_EMPTY_EN),
+150                             .ALMOST_EMPTY_VAL(ALMOST_EMPTY_VAL)
+151                         ) u_read_pointer (
+152                             .rclk(rclk),
+153                             .rrst(rrst_internal),
+154                             .rinc(rinc_internal),
+155                             .wgray_sync(wptr_gray_sync_r2),
+156                             .raddr(raddr),
+157                             .rgray(rptr_gray),
+158                             .rempty(rempty_raw),
+159                             .ralmost_empty(ralmost_empty)
+160                         );
+161                     
+162                         // 内存实例化
+163                         dual_port_ram #(
+164                             .WIDTH(WIDTH),
+165                             .DEPTH(MEM_DEPTH)
+166                         ) u_dual_port_ram (
+167                             .wclk(wclk),
+168                             .waddr(waddr),
+169                             .winc(winc && !wfull),
+170                             .wdata(wdata),
+171                             .raddr(raddr),
+172                             .rdata(ram_rdata)
+173                         );
+174                     
+175                     /*============================ FWFT & Output Register Logic ============================*/
+176                         generate
+177                             // ---------------------------------------------------------------------
+178                             // 模式 0: 标准模式 (FWFT=0, OUT_REG=0) -> 读使能后 1 拍输出
+179                             // ---------------------------------------------------------------------
+180                             if (!FWFT_EN && !OUT_REG_EN) begin : g_std_mode
+181                                 assign rinc_internal = rinc;
+182                                 assign rempty        = rempty_raw;
+183                                 
+184                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_out_async
+185                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+186                                         if (rst_cond_r) rdata <= '0;
+187                                         else if (rinc)  rdata <= ram_rdata;
+188                                     end
+189                                 end else begin : g_out_sync
+190                                     always_ff @(posedge rclk) begin
+191                                         if (rst_cond_r) rdata <= '0;
+192                                         else if (rinc)  rdata <= ram_rdata;
+193                                     end
+194                                 end
+195                             end
+196                     
+197                             // ---------------------------------------------------------------------
+198                             // 模式 1: 带输出寄存器的标准模式 (FWFT=0, OUT_REG=1) -> 读使能后 2 拍输出
+199                             // ---------------------------------------------------------------------
+200                             else if (!FWFT_EN && OUT_REG_EN) begin : g_std_reg_mode
+201                                 assign rinc_internal = rinc;
+202                                 assign rempty        = rempty_raw;
+203                                 logic [WIDTH-1:0] rdata_stage1;
+204                     
+205                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_out_reg_async
+206                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+207                                         if (rst_cond_r) begin
+208                                             rdata_stage1 <= '0;
+209                                             rdata        <= '0;
+210                                         end else begin
+211                                             if (rinc) rdata_stage1 <= ram_rdata;
+212                                             rdata <= rdata_stage1;
+213                                         end
+214                                     end
+215                                 end else begin : g_out_reg_sync
+216                                     always_ff @(posedge rclk) begin
+217                                         if (rst_cond_r) begin
+218                                             rdata_stage1 <= '0;
+219                                             rdata        <= '0;
+220                                         end else begin
+221                                             if (rinc) rdata_stage1 <= ram_rdata;
+222                                             rdata <= rdata_stage1;
+223                                         end
+224                                     end
+225                                 end
+226                             end
+227                     
+228                             // ---------------------------------------------------------------------
+229                             // 模式 2: 头优先模式 (FWFT=1, OUT_REG=0) -> 0 拍输出（数据随 empty 自动呈现）
+230                             // ---------------------------------------------------------------------
+231                             else if (FWFT_EN && !OUT_REG_EN) begin : g_fwft_direct_mode
+232                                 // 在直通 FWFT 中，只要外部有读使能且 FIFO 非空，内部就对 RAM 递增
+233                                 assign rinc_internal = rinc && !rempty_raw;
+234                                 assign rempty        = rempty_raw;
+235                                 assign rdata         = ram_rdata;
+236                             end
+237                     
+238                             // ---------------------------------------------------------------------
+239                             // 模式 3: 带输出寄存器的 FWFT 模式 (FWFT=1, OUT_REG=1) -> 寄存器输出 & 头优先
+240                             // ---------------------------------------------------------------------
+241                             else if (FWFT_EN && OUT_REG_EN) begin : g_fwft_reg_mode
+242                                 // 使用经典的 Skid Buffer 架构
+243                                 logic [WIDTH-1:0] rdata_reg;
+244                                 logic             rdata_valid;
+245                                 
+246                                 // 当外部不读，但内部 RAM 输出了新数据时，使用一个暂存寄存器暂存
+247                                 logic [WIDTH-1:0] skid_reg;
+248                                 logic             skid_valid;
+249                     
+250                                 assign rempty = !rdata_valid;
+251                                 
+252                                 // 只要输出寄存器空，或者外部正在读出，内部就允许向 RAM 索要新数据
+253                                 assign rinc_internal = !rempty_raw && (!rdata_valid || rinc || !skid_valid);
+254                     
+255                                 if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_skid_async
+256                                     always_ff @(posedge rclk or posedge rst_cond_r) begin
+257        1/1                              if (rst_cond_r) begin
+258        1/1                                  rdata_reg   <= '0;
+259        1/1                                  rdata_valid <= 1'b0;
+260        1/1                                  skid_reg    <= '0;
+261        1/1                                  skid_valid  <= 1'b0;
+262                                         end else begin
+263                                             // 状态转移与数据寄存
+264        1/1                                  if (rinc_internal) begin
+265        1/1                                      if (rdata_valid && !rinc) begin
+266                                                     // 外部不读，但内部读了，数据滑入 skid_reg
+267        1/1                                          skid_reg   <= ram_rdata;
+268        1/1                                          skid_valid <= 1'b1;
+269                                                 end else begin
+270                                                     // 正常读出，数据直接进入主输出寄存器
+271        1/1                                          rdata_reg   <= ram_rdata;
+272        1/1                                          rdata_valid <= 1'b1;
+273                                                 end
+274        1/1                                  end else if (rinc) begin
+275        1/1                                      if (skid_valid) begin
+276                                                     // 外部读，且 skid 中有数据，将 skid 数据移入主寄存器
+277        1/1                                          rdata_reg   <= skid_reg;
+278        1/1                                          rdata_valid <= 1'b1;
+279        1/1                                          skid_valid  <= 1'b0;
+280                                                 end else begin
+281        1/1                                          rdata_valid <= 1'b0;
+282                                                 end
+283                                             end
+                        MISSING_ELSE
+
+-------------------------------------------------------------------------------
+Cond Coverage for Instance : tb_top.dut(x)
+
+               Total   Covered  Percent
+Conditions          3        3   100.00
+Logical             3        3   100.00
+Non-Logical         0        0
+Event               0        0
+
+ LINE       265
+ EXPRESSION (g_fwft_reg_mode.rdata_valid && ((!rinc)))
+             -------------1-------------    ----2----
+
+-1- -2- Status
+ 0   1  Covered
+ 1   0  Covered
+ 1   1  Covered
+
+ LINE       253
+ EXPRESSION (((!rempty_raw)) && (((!g_fwft_reg_mode.rdata_valid)) || rinc || ((!g_fwft_reg_mode.skid_valid))))
+             -------1-------    --------------------------------------2--------------------------------------
+
+-1- -2- Status
+ 0   1  Excluded
+ 1   0  Excluded
+ 1   1  Excluded
+
+ LINE       253
+ SUB-EXPRESSION (((!g_fwft_reg_mode.rdata_valid)) || rinc || ((!g_fwft_reg_mode.skid_valid)))
+                 ----------------1---------------    --2-    ---------------3---------------
+
+-1- -2- -3- Status
+ 0   0   0  Excluded
+ 0   0   1  Excluded
+ 0   1   0  Excluded
+ 1   0   0  Excluded
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Instance : tb_top.dut(x)
+                Total Covered Percent 
+Totals          30    30      100.00  
+Total Bits      294   294     100.00  
+Total Bits 0->1 147   147     100.00  
+Total Bits 1->0 147   147     100.00  
+
+                            
+Ports          12 12 100.00 
+Port Bits      84 84 100.00 
+Port Bits 0->1 42 42 100.00 
+Port Bits 1->0 42 42 100.00 
+
+                                
+Signals          18  18  100.00 
+Signal Bits      210 210 100.00 
+Signal Bits 0->1 105 105 100.00 
+Signal Bits 1->0 105 105 100.00 
+
+Port Details
+              Toggle Toggle 1->0 Toggle 0->1 Direction 
+wclk          Yes    Yes         Yes         INPUT     
+wrst          Yes    Yes         Yes         INPUT     
+winc          Yes    Yes         Yes         INPUT     
+wdata[15:0]   Yes    Yes         Yes         INPUT     
+wfull         Yes    Yes         Yes         OUTPUT    
+walmost_full  Yes    Yes         Yes         OUTPUT    
+rclk          Yes    Yes         Yes         INPUT     
+rrst          Yes    Yes         Yes         INPUT     
+rinc          Yes    Yes         Yes         INPUT     
+rdata[15:0]   Yes    Yes         Yes         OUTPUT    
+rempty        Yes    Yes         Yes         OUTPUT    
+ralmost_empty Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+                                Toggle Toggle 1->0 Toggle 0->1 
+wrst_internal                   Yes    Yes         Yes         
+rrst_internal                   Yes    Yes         Yes         
+rst_cond_r                      Yes    Yes         Yes         
+wptr_gray[7:0]                  Yes    Yes         Yes         
+rptr_gray[7:0]                  Yes    Yes         Yes         
+rptr_gray_sync_w2[7:0]          Yes    Yes         Yes         
+wptr_gray_sync_r2[7:0]          Yes    Yes         Yes         
+waddr[6:0]                      Yes    Yes         Yes         
+raddr[6:0]                      Yes    Yes         Yes         
+rinc_internal                   Yes    Yes         Yes         
+rempty_raw                      Yes    Yes         Yes         
+ram_rdata[15:0]                 Yes    Yes         Yes         
+g_rst_bridge.wrst_sync_reg[1:0] Yes    Yes         Yes         
+g_rst_bridge.rrst_sync_reg[1:0] Yes    Yes         Yes         
+g_fwft_reg_mode.rdata_reg[15:0] Yes    Yes         Yes         
+g_fwft_reg_mode.rdata_valid     Yes    Yes         Yes         
+g_fwft_reg_mode.skid_reg[15:0]  Yes    Yes         Yes         
+g_fwft_reg_mode.skid_valid      Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Instance : tb_top.dut(x)
+         Line No. Total Covered Percent 
+Branches          10    10      100.00  
+IF       66       2     2       100.00  
+IF       80       2     2       100.00  
+IF       257      6     6       100.00  
+
+
+66                             if (!wrst) wrst_sync_reg <= '0;
+                               -1-  
+                               ==>
+67                             else       wrst_sync_reg <= {wrst_sync_reg[0], 1'b1};
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+80                             if (!rrst) rrst_sync_reg <= '0;
+                               -1-  
+                               ==>
+81                             else       rrst_sync_reg <= {rrst_sync_reg[0], 1'b1};
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+257                            if (rst_cond_r) begin
+                               -1-  
+258                                rdata_reg   <= '0;
+                                   ==>
+259                                rdata_valid <= 1'b0;
+260                                skid_reg    <= '0;
+261                                skid_valid  <= 1'b0;
+262                            end else begin
+263                                // 状态转移与数据寄存
+264                                if (rinc_internal) begin
+                                   -2-  
+265                                    if (rdata_valid && !rinc) begin
+                                       -3-  
+266                                        // 外部不读，但内部读了，数据滑入 skid_reg
+267                                        skid_reg   <= ram_rdata;
+                                           ==>
+268                                        skid_valid <= 1'b1;
+269                                    end else begin
+270                                        // 正常读出，数据直接进入主输出寄存器
+271                                        rdata_reg   <= ram_rdata;
+                                           ==>
+272                                        rdata_valid <= 1'b1;
+273                                    end
+274                                end else if (rinc) begin
+                                            -4-  
+275                                    if (skid_valid) begin
+                                       -5-  
+276                                        // 外部读，且 skid 中有数据，将 skid 数据移入主寄存器
+277                                        rdata_reg   <= skid_reg;
+                                           ==>
+278                                        rdata_valid <= 1'b1;
+279                                        skid_valid  <= 1'b0;
+280                                    end else begin
+281                                        rdata_valid <= 1'b0;
+                                           ==>
+282                                    end
+283                                end
+                                   MISSING_ELSE
+                                   ==>
+
+Branches:
+
+-1- -2- -3- -4- -5- Status  
+1   -   -   -   -   Covered 
+0   1   1   -   -   Covered 
+0   1   0   -   -   Covered 
+0   0   -   1   1   Covered 
+0   0   -   1   0   Covered 
+0   0   -   0   -   Covered 
+
+
+===============================================================================
+Module : rptr
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../rtl_src/rptr.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME                      
+100.00 100.00 --     100.00 --     100.00 tb_top.dut.u_read_pointer 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : rptr
+
+             Line No.   Total   Covered  Percent
+TOTAL                       13       13   100.00
+ALWAYS             48        7        7   100.00
+ALWAYS             84        3        3   100.00
+ALWAYS             99        3        3   100.00
+
+47                                  always_ff @(posedge rclk or posedge rst_cond) begin
+48         1/1                          if (rst_cond) begin
+49         1/1                              rbin   <= '0;
+50         1/1                              rgray  <= '0;
+51         1/1                              rempty <= 1'b1; // 复位时为空
+52                                      end else begin
+53         1/1                              rbin   <= rbin_next;
+54         1/1                              rgray  <= rgray_next;
+55         1/1                              rempty <= rempty_val;
+56                                      end
+57                                  end
+58                              end else begin : g_sync_rst
+59                                  always_ff @(posedge rclk) begin
+60                                      if (rst_cond) begin
+61                                          rbin   <= '0;
+62                                          rgray  <= '0;
+63                                          rempty <= 1'b1;
+64                                      end else begin
+65                                          rbin   <= rbin_next;
+66                                          rgray  <= rgray_next;
+67                                          rempty <= rempty_val;
+68                                      end
+69                                  end
+70                              end
+71                          endgenerate
+72                      
+73                          // =========================================================================
+74                          // 将近空 (Almost Empty) 检测逻辑
+75                          // =========================================================================
+76                          generate
+77                              if (ALMOST_EMPTY_EN) begin : g_almost_empty
+78                                  logic [PTR_WIDTH-1:0] wbin_sync;
+79                                  logic [PTR_WIDTH-1:0] rcount;
+80                                  logic                 ralmost_empty_val;
+81                      
+82                                  // 格雷码转二进制：将同步过来的写指针还原为二进制
+83                                  always_comb begin
+84         1/1                          wbin_sync[PTR_WIDTH-1] = wgray_sync[PTR_WIDTH-1];
+85         1/1                          for (int i = PTR_WIDTH-2; i >= 0; i--) begin
+86         1/1                              wbin_sync[i] = wbin_sync[i+1] ^ wgray_sync[i];
+87                                      end
+88                                  end
+89                      
+90                                  // 计算当前读取域看到的 FIFO 剩余数据量
+91                                  assign rcount = wbin_sync - rbin;
+92                      
+93                                  // 预估下一拍是否达到将近空阈值
+94                                  // 当数据量小于等于 ALMOST_EMPTY_VAL 时拉高
+95                                  assign ralmost_empty_val = (rcount <= ALMOST_EMPTY_VAL);
+96                      
+97                                  if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_ae_async
+98                                      always_ff @(posedge rclk or posedge rst_cond) begin
+99         2/2                              if (rst_cond) ralmost_empty <= 1'b1; // 复位时默认处于将近空状态
+100        1/1                              else          ralmost_empty <= ralmost_empty_val;
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : rptr
+                Total Covered Percent 
+Totals          16    16      100.00  
+Total Bits      142   142     100.00  
+Total Bits 0->1 71    71      100.00  
+Total Bits 1->0 71    71      100.00  
+
+                            
+Ports          8  8  100.00 
+Port Bits      56 56 100.00 
+Port Bits 0->1 28 28 100.00 
+Port Bits 1->0 28 28 100.00 
+
+                              
+Signals          8  8  100.00 
+Signal Bits      86 86 100.00 
+Signal Bits 0->1 43 43 100.00 
+Signal Bits 1->0 43 43 100.00 
+
+Port Details
+                Toggle Toggle 1->0 Toggle 0->1 Direction 
+rclk            Yes    Yes         Yes         INPUT     
+rrst            Yes    Yes         Yes         INPUT     
+rinc            Yes    Yes         Yes         INPUT     
+wgray_sync[7:0] Yes    Yes         Yes         INPUT     
+raddr[6:0]      Yes    Yes         Yes         OUTPUT    
+rgray[7:0]      Yes    Yes         Yes         OUTPUT    
+rempty          Yes    Yes         Yes         OUTPUT    
+ralmost_empty   Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+                                 Toggle Toggle 1->0 Toggle 0->1 
+rbin[7:0]                        Yes    Yes         Yes         
+rbin_next[7:0]                   Yes    Yes         Yes         
+rgray_next[7:0]                  Yes    Yes         Yes         
+rempty_val                       Yes    Yes         Yes         
+rst_cond                         Yes    Yes         Yes         
+g_almost_empty.wbin_sync[7:0]    Yes    Yes         Yes         
+g_almost_empty.rcount[7:0]       Yes    Yes         Yes         
+g_almost_empty.ralmost_empty_val Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Module : rptr
+         Line No. Total Covered Percent 
+Branches          4     4       100.00  
+IF       48       2     2       100.00  
+IF       99       2     2       100.00  
+
+
+48                         if (rst_cond) begin
+                           -1-  
+49                             rbin   <= '0;
+                               ==>
+50                             rgray  <= '0;
+51                             rempty <= 1'b1; // 复位时为空
+52                         end else begin
+53                             rbin   <= rbin_next;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+99                             if (rst_cond) ralmost_empty <= 1'b1; // 复位时默认处于将近空状态
+                               -1-  
+                               ==>
+100                            else          ralmost_empty <= ralmost_empty_val;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut.u_read_pointer
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME 
+100.00 100.00 --     100.00 --     100.00 rptr 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Since this is the module's only instance, the coverage report is the same as for the module.
+===============================================================================
+Module : wptr
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../rtl_src/wptr.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME                       
+100.00 100.00 --     100.00 --     100.00 tb_top.dut.u_write_pointer 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : wptr
+
+             Line No.   Total   Covered  Percent
+TOTAL                       13       13   100.00
+ALWAYS             47        7        7   100.00
+ALWAYS             83        3        3   100.00
+ALWAYS             98        3        3   100.00
+
+46                                  always_ff @(posedge wclk or posedge rst_cond) begin
+47         1/1                          if (rst_cond) begin
+48         1/1                              wbin  <= '0;
+49         1/1                              wgray <= '0;
+50         1/1                              wfull <= 1'b0;
+51                                      end else begin
+52         1/1                              wbin  <= wbin_next;
+53         1/1                              wgray <= wgray_next;
+54         1/1                              wfull <= wfull_val;
+55                                      end
+56                                  end
+57                              end else begin : g_sync_rst
+58                                  always_ff @(posedge wclk) begin
+59                                      if (rst_cond) begin
+60                                          wbin  <= '0;
+61                                          wgray <= '0;
+62                                          wfull <= 1'b0;
+63                                      end else begin
+64                                          wbin  <= wbin_next;
+65                                          wgray <= wgray_next;
+66                                          wfull <= wfull_val;
+67                                      end
+68                                  end
+69                              end
+70                          endgenerate
+71                      
+72                          // =========================================================================
+73                          // 将近满 (Almost Full) 检测逻辑
+74                          // =========================================================================
+75                          generate
+76                              if (ALMOST_FULL_EN) begin : g_almost_full
+77                                  logic [PTR_WIDTH-1:0] rbin_sync;
+78                                  logic [PTR_WIDTH-1:0] wcount;
+79                                  logic                 walmost_full_val;
+80                      
+81                                  // 格雷码转二进制：将同步过来的读指针还原为二进制
+82                                  always_comb begin
+83         1/1                          rbin_sync[PTR_WIDTH-1] = rgray_sync[PTR_WIDTH-1];
+84         1/1                          for (int i = PTR_WIDTH-2; i >= 0; i--) begin
+85         1/1                              rbin_sync[i] = rbin_sync[i+1] ^ rgray_sync[i];
+86                                      end
+87                                  end
+88                      
+89                                  // 计算当前写入域看到的 FIFO 占用大小 (考虑回绕)
+90                                  assign wcount = wbin - rbin_sync;
+91                      
+92                                  // 预估下一拍是否达到将近满阈值
+93                                  // 当剩余空间小于等于 ALMOST_FULL_VAL 时拉高
+94                                  assign walmost_full_val = (wcount >= (DEPTH - ALMOST_FULL_VAL));
+95                      
+96                                  if (RST_TYPE == ASYNC_RST || RST_TYPE == ASYNC_SYNC_RELEASE) begin : g_af_async
+97                                      always_ff @(posedge wclk or posedge rst_cond) begin
+98         2/2                              if (rst_cond) walmost_full <= 1'b0;
+99         1/1                              else          walmost_full <= walmost_full_val;
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : wptr
+                Total Covered Percent 
+Totals          16    16      100.00  
+Total Bits      142   142     100.00  
+Total Bits 0->1 71    71      100.00  
+Total Bits 1->0 71    71      100.00  
+
+                            
+Ports          8  8  100.00 
+Port Bits      56 56 100.00 
+Port Bits 0->1 28 28 100.00 
+Port Bits 1->0 28 28 100.00 
+
+                              
+Signals          8  8  100.00 
+Signal Bits      86 86 100.00 
+Signal Bits 0->1 43 43 100.00 
+Signal Bits 1->0 43 43 100.00 
+
+Port Details
+                Toggle Toggle 1->0 Toggle 0->1 Direction 
+wclk            Yes    Yes         Yes         INPUT     
+wrst            Yes    Yes         Yes         INPUT     
+winc            Yes    Yes         Yes         INPUT     
+rgray_sync[7:0] Yes    Yes         Yes         INPUT     
+waddr[6:0]      Yes    Yes         Yes         OUTPUT    
+wgray[7:0]      Yes    Yes         Yes         OUTPUT    
+wfull           Yes    Yes         Yes         OUTPUT    
+walmost_full    Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+                               Toggle Toggle 1->0 Toggle 0->1 
+wbin[7:0]                      Yes    Yes         Yes         
+wbin_next[7:0]                 Yes    Yes         Yes         
+wgray_next[7:0]                Yes    Yes         Yes         
+wfull_val                      Yes    Yes         Yes         
+rst_cond                       Yes    Yes         Yes         
+g_almost_full.rbin_sync[7:0]   Yes    Yes         Yes         
+g_almost_full.wcount[7:0]      Yes    Yes         Yes         
+g_almost_full.walmost_full_val Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Module : wptr
+         Line No. Total Covered Percent 
+Branches          4     4       100.00  
+IF       47       2     2       100.00  
+IF       98       2     2       100.00  
+
+
+47                         if (rst_cond) begin
+                           -1-  
+48                             wbin  <= '0;
+                               ==>
+49                             wgray <= '0;
+50                             wfull <= 1'b0;
+51                         end else begin
+52                             wbin  <= wbin_next;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+98                             if (rst_cond) walmost_full <= 1'b0;
+                               -1-  
+                               ==>
+99                             else          walmost_full <= walmost_full_val;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut.u_write_pointer
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME 
+100.00 100.00 --     100.00 --     100.00 wptr 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Since this is the module's only instance, the coverage report is the same as for the module.
+===============================================================================
+Module : tb_top
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     --     
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../uvm_src/tb_top.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 --     100.00 --     --     tb_top 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : tb_top
+
+             Line No.   Total   Covered  Percent
+TOTAL                       23       23   100.00
+ALWAYS             18        2        2   100.00
+ALWAYS             19        2        2   100.00
+INITIAL            74       14       14   100.00
+INITIAL            94        2        2   100.00
+INITIAL           102        3        3   100.00
+
+17                          // 2. 产生时钟信号
+18         2/2              always #WRITE_CLK_HALF_PERIOD wclk = ~wclk;
+19         2/2              always #READ_CLK_HALF_PERIOD  rclk = ~rclk;
+20                      
+21                          // 3. 实例化接口
+22                          fifo_if #(.WIDTH(16)) intf();
+23                      
+24                          // 将外部产生的时钟连接至接口
+25                          assign intf.wclk = wclk;
+26                          assign intf.rclk = rclk;
+27                          assign intf.wrst = wrst;
+28                          assign intf.rrst = rrst;
+29                      
+30                          // 默认宏定义，若 VCS 命令行未指定，则使用默认标准参数
+31                          `ifndef CFG_DEPTH
+32                              `define CFG_DEPTH 64
+33                          `endif
+34                          `ifndef CFG_WIDTH
+35                              `define CFG_WIDTH 16
+36                          `endif
+37                          `ifndef CFG_FWFT_EN
+38                              `define CFG_FWFT_EN 1'b0
+39                          `endif
+40                          `ifndef CFG_OUT_REG_EN
+41                              `define CFG_OUT_REG_EN 1'b0
+42                          `endif
+43                      
+44                          // 4. 实例化 DUT (参数完全由外部编译宏配置)
+45                          async_fifo_top #(
+46                              .DEPTH(`CFG_DEPTH),
+47                              .WIDTH(`CFG_WIDTH),
+48                              .FWFT_EN(`CFG_FWFT_EN),
+49                              .OUT_REG_EN(`CFG_OUT_REG_EN),
+50                              .RST_TYPE(fifo_cfg_pkg::ASYNC_SYNC_RELEASE), 
+51                              .RST_POLARITY(fifo_cfg_pkg::ACTIVE_LOW),      
+52                              .ALMOST_FULL_EN(1'b1),   
+53                              .ALMOST_FULL_VAL(4),
+54                              .ALMOST_EMPTY_EN(1'b1),  
+55                              .ALMOST_EMPTY_VAL(4)
+56                          ) dut (
+57                              .wclk(intf.wclk),
+58                              .wrst(intf.wrst),
+59                              .winc(intf.winc),
+60                              .wdata(intf.wdata),
+61                              .wfull(intf.wfull),
+62                              .walmost_full(intf.walmost_full),
+63                      
+64                              .rclk(intf.rclk),
+65                              .rrst(intf.rrst),
+66                              .rinc(intf.rinc),
+67                              .rdata(intf.rdata),
+68                              .rempty(intf.rempty),
+69                              .ralmost_empty(intf.ralmost_empty)
+70                          );
+71                      
+72                          // 5. 复位产生逻辑与 UVM 启动
+73                          initial begin
+74         1/1                  wrst = 1'b0; // 初始低电平复位
+75         1/1                  rrst = 1'b0;
+76                              
+77                              // 维持 100ns 翻转复位
+78         2/2                  #100;
+79         1/1                  wrst = 1'b1;
+80         1/1                  rrst = 1'b1;
+81                      
+82         2/2                  #100;
+83         1/1                  wrst = 1'b0;
+84         1/1                  rrst = 1'b0;
+85                      
+86         2/2                  #100;
+87         1/1                  wrst = 1'b1;
+88         1/1                  rrst = 1'b1;
+89                      
+90                          end
+91                      
+92                          initial begin
+93                              // 将接口注册进 uvm_config_db
+94         1/1                  uvm_config_db#(virtual fifo_if)::set(null, "*", "vif", intf);
+95                              
+96                              // 启动 UVM 运行环境
+97         1/1                  run_test();
+98                          end
+99                      
+100                         // 6. 导出 FSDB 波形给 Verdi
+101                         initial begin
+102        1/1                  $fsdbDumpfile("tb_top.fsdb");
+103        1/1                  $fsdbDumpvars(0, tb_top);
+104        1/1                  $fsdbDumpMDA(); // 转储二维数组/RAM内部值
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : tb_top
+                Total Covered Percent 
+Totals          4     4       100.00  
+Total Bits      8     8       100.00  
+Total Bits 0->1 4     4       100.00  
+Total Bits 1->0 4     4       100.00  
+
+                            
+Signals          4 4 100.00 
+Signal Bits      8 8 100.00 
+Signal Bits 0->1 4 4 100.00 
+Signal Bits 1->0 4 4 100.00 
+
+Signal Details
+     Toggle Toggle 1->0 Toggle 0->1 
+wclk Yes    Yes         Yes         
+rclk Yes    Yes         Yes         
+wrst Yes    Yes         Yes         
+rrst Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     --     
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 100.00 100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 --     100.00 --     --     tb_top 
+
+
+Parent : 
+
+none
+----------------
+
+
+Subtrees :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+100.00 --     --     100.00 --     --     intf   
+
+
+
+-------------------------------------------------------------------------------
+Since this is the module's only instance, the coverage report is the same as for the module.
+===============================================================================
+Module : sync_gray
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../rtl_src/sync_gray.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME                  
+100.00 100.00 --     100.00 --     100.00 tb_top.dut.u_sync_r2w 
+100.00 100.00 --     100.00 --     100.00 tb_top.dut.u_sync_w2r 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : sync_gray
+
+             Line No.   Total   Covered  Percent
+TOTAL                        6        6   100.00
+ALWAYS             26        6        6   100.00
+
+25                                  always_ff @(posedge clk or posedge rst_cond) begin
+26         1/1                          if (rst_cond) begin
+27         1/1                              for (int i = 0; i < STAGES; i++) begin
+28         1/1                                  sync_reg[i] <= '0;
+29                                          end
+30                                      end else begin
+31         1/1                              sync_reg[0] <= din;
+32         1/1                              for (int i = 1; i < STAGES; i++) begin
+33         1/1                                  sync_reg[i] <= sync_reg[i-1];
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : sync_gray
+                Total Covered Percent 
+Totals          5     5       100.00  
+Total Bits      38    38      100.00  
+Total Bits 0->1 19    19      100.00  
+Total Bits 1->0 19    19      100.00  
+
+                            
+Ports          4  4  100.00 
+Port Bits      36 36 100.00 
+Port Bits 0->1 18 18 100.00 
+Port Bits 1->0 18 18 100.00 
+
+                            
+Signals          1 1 100.00 
+Signal Bits      2 2 100.00 
+Signal Bits 0->1 1 1 100.00 
+Signal Bits 1->0 1 1 100.00 
+
+Port Details
+          Toggle Toggle 1->0 Toggle 0->1 Direction 
+clk       Yes    Yes         Yes         INPUT     
+rst       Yes    Yes         Yes         INPUT     
+din[7:0]  Yes    Yes         Yes         INPUT     
+dout[7:0] Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+         Toggle Toggle 1->0 Toggle 0->1 
+rst_cond Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Module : sync_gray
+         Line No. Total Covered Percent 
+Branches          2     2       100.00  
+IF       26       2     2       100.00  
+
+
+26                         if (rst_cond) begin
+                           -1-  
+27                             for (int i = 0; i < STAGES; i++) begin
+                               ==>
+28                                 sync_reg[i] <= '0;
+29                             end
+30                         end else begin
+31                             sync_reg[0] <= din;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut.u_sync_r2w
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME      
+100.00 100.00 --     100.00 --     100.00 sync_gray 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Instance : tb_top.dut.u_sync_r2w
+
+             Line No.   Total   Covered  Percent
+TOTAL                        6        6   100.00
+ALWAYS             26        6        6   100.00
+
+25                                  always_ff @(posedge clk or posedge rst_cond) begin
+26         1/1                          if (rst_cond) begin
+27         1/1                              for (int i = 0; i < STAGES; i++) begin
+28         1/1                                  sync_reg[i] <= '0;
+29                                          end
+30                                      end else begin
+31         1/1                              sync_reg[0] <= din;
+32         1/1                              for (int i = 1; i < STAGES; i++) begin
+33         1/1                                  sync_reg[i] <= sync_reg[i-1];
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Instance : tb_top.dut.u_sync_r2w
+                Total Covered Percent 
+Totals          5     5       100.00  
+Total Bits      38    38      100.00  
+Total Bits 0->1 19    19      100.00  
+Total Bits 1->0 19    19      100.00  
+
+                            
+Ports          4  4  100.00 
+Port Bits      36 36 100.00 
+Port Bits 0->1 18 18 100.00 
+Port Bits 1->0 18 18 100.00 
+
+                            
+Signals          1 1 100.00 
+Signal Bits      2 2 100.00 
+Signal Bits 0->1 1 1 100.00 
+Signal Bits 1->0 1 1 100.00 
+
+Port Details
+          Toggle Toggle 1->0 Toggle 0->1 Direction 
+clk       Yes    Yes         Yes         INPUT     
+rst       Yes    Yes         Yes         INPUT     
+din[7:0]  Yes    Yes         Yes         INPUT     
+dout[7:0] Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+         Toggle Toggle 1->0 Toggle 0->1 
+rst_cond Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Instance : tb_top.dut.u_sync_r2w
+         Line No. Total Covered Percent 
+Branches          2     2       100.00  
+IF       26       2     2       100.00  
+
+
+26                         if (rst_cond) begin
+                           -1-  
+27                             for (int i = 0; i < STAGES; i++) begin
+                               ==>
+28                                 sync_reg[i] <= '0;
+29                             end
+30                         end else begin
+31                             sync_reg[0] <= din;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut.u_sync_w2r
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME      
+100.00 100.00 --     100.00 --     100.00 sync_gray 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Instance : tb_top.dut.u_sync_w2r
+
+             Line No.   Total   Covered  Percent
+TOTAL                        6        6   100.00
+ALWAYS             26        6        6   100.00
+
+25                                  always_ff @(posedge clk or posedge rst_cond) begin
+26         1/1                          if (rst_cond) begin
+27         1/1                              for (int i = 0; i < STAGES; i++) begin
+28         1/1                                  sync_reg[i] <= '0;
+29                                          end
+30                                      end else begin
+31         1/1                              sync_reg[0] <= din;
+32         1/1                              for (int i = 1; i < STAGES; i++) begin
+33         1/1                                  sync_reg[i] <= sync_reg[i-1];
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Instance : tb_top.dut.u_sync_w2r
+                Total Covered Percent 
+Totals          5     5       100.00  
+Total Bits      38    38      100.00  
+Total Bits 0->1 19    19      100.00  
+Total Bits 1->0 19    19      100.00  
+
+                            
+Ports          4  4  100.00 
+Port Bits      36 36 100.00 
+Port Bits 0->1 18 18 100.00 
+Port Bits 1->0 18 18 100.00 
+
+                            
+Signals          1 1 100.00 
+Signal Bits      2 2 100.00 
+Signal Bits 0->1 1 1 100.00 
+Signal Bits 1->0 1 1 100.00 
+
+Port Details
+          Toggle Toggle 1->0 Toggle 0->1 Direction 
+clk       Yes    Yes         Yes         INPUT     
+rst       Yes    Yes         Yes         INPUT     
+din[7:0]  Yes    Yes         Yes         INPUT     
+dout[7:0] Yes    Yes         Yes         OUTPUT    
+
+Signal Details
+         Toggle Toggle 1->0 Toggle 0->1 
+rst_cond Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Instance : tb_top.dut.u_sync_w2r
+         Line No. Total Covered Percent 
+Branches          2     2       100.00  
+IF       26       2     2       100.00  
+
+
+26                         if (rst_cond) begin
+                           -1-  
+27                             for (int i = 0; i < STAGES; i++) begin
+                               ==>
+28                                 sync_reg[i] <= '0;
+29                             end
+30                         end else begin
+31                             sync_reg[0] <= din;
+                               ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+===============================================================================
+Module : fifo_if
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 --     --     100.00 --     --     
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../uvm_src/fifo_if.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME        
+100.00 --     --     100.00 --     --     tb_top.intf 
+
+
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : fifo_if
+                Total Covered Percent 
+Totals          12    12      100.00  
+Total Bits      84    84      100.00  
+Total Bits 0->1 42    42      100.00  
+Total Bits 1->0 42    42      100.00  
+
+                              
+Signals          12 12 100.00 
+Signal Bits      84 84 100.00 
+Signal Bits 0->1 42 42 100.00 
+Signal Bits 1->0 42 42 100.00 
+
+Signal Details
+              Toggle Toggle 1->0 Toggle 0->1 
+wclk          Yes    Yes         Yes         
+wrst          Yes    Yes         Yes         
+winc          Yes    Yes         Yes         
+wdata[15:0]   Yes    Yes         Yes         
+wfull         Yes    Yes         Yes         
+walmost_full  Yes    Yes         Yes         
+rclk          Yes    Yes         Yes         
+rrst          Yes    Yes         Yes         
+rinc          Yes    Yes         Yes         
+rdata[15:0]   Yes    Yes         Yes         
+rempty        Yes    Yes         Yes         
+ralmost_empty Yes    Yes         Yes         
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.intf
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 --     --     100.00 --     --     
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 --     --     100.00 --     --     
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME    
+100.00 --     --     100.00 --     --     fifo_if 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 --     100.00 --     --     tb_top 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Since this is the module's only instance, the coverage report is the same as for the module.
+===============================================================================
+Module : dual_port_ram
+===============================================================================
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+Source File(s) : 
+
+/home/ICer/kqfifo/FIFO/uvm_work/../rtl_src/dual_port_ram.sv
+
+Module self-instances :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME                       
+100.00 100.00 --     100.00 --     100.00 tb_top.dut.u_dual_port_ram 
+
+
+
+-------------------------------------------------------------------------------
+Line Coverage for Module : dual_port_ram
+
+             Line No.   Total   Covered  Percent
+TOTAL                        2        2   100.00
+ALWAYS             19        2        2   100.00
+
+18                          always_ff @(posedge wclk) begin
+19         1/1                  if (winc) begin
+20         1/1                      mem[waddr] <= wdata;
+21                              end
+                        MISSING_ELSE
+
+-------------------------------------------------------------------------------
+Toggle Coverage for Module : dual_port_ram
+                Total Covered Percent 
+Totals          6     6       100.00  
+Total Bits      96    96      100.00  
+Total Bits 0->1 48    48      100.00  
+Total Bits 1->0 48    48      100.00  
+
+                            
+Ports          6  6  100.00 
+Port Bits      96 96 100.00 
+Port Bits 0->1 48 48 100.00 
+Port Bits 1->0 48 48 100.00 
+
+Port Details
+            Toggle Toggle 1->0 Toggle 0->1 Direction 
+wclk        Yes    Yes         Yes         INPUT     
+winc        Yes    Yes         Yes         INPUT     
+waddr[6:0]  Yes    Yes         Yes         INPUT     
+wdata[15:0] Yes    Yes         Yes         INPUT     
+raddr[6:0]  Yes    Yes         Yes         INPUT     
+rdata[15:0] Yes    Yes         Yes         OUTPUT    
+
+
+-------------------------------------------------------------------------------
+Branch Coverage for Module : dual_port_ram
+         Line No. Total Covered Percent 
+Branches          2     2       100.00  
+IF       19       2     2       100.00  
+
+
+19                 if (winc) begin
+                   -1-  
+20                     mem[waddr] <= wdata;
+                       ==>
+21                 end
+                   MISSING_ELSE
+                   ==>
+
+Branches:
+
+-1- Status  
+1   Covered 
+0   Covered 
+
+
+-------------------------------------------------------------------------------
+===============================================================================
+Module Instance : tb_top.dut.u_dual_port_ram
+===============================================================================
+
+Instance :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Instance's subtree :
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH 
+100.00 100.00 --     100.00 --     100.00 
+
+
+Module : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME          
+100.00 100.00 --     100.00 --     100.00 dual_port_ram 
+
+
+Parent : 
+
+SCORE  LINE   COND   TOGGLE FSM    BRANCH NAME   
+100.00 100.00 100.00 100.00 --     100.00 dut(x) 
+
+
+Subtrees :
+
+
+no children
+----------------
+
+
+-------------------------------------------------------------------------------
+Since this is the module's only instance, the coverage report is the same as for the module.

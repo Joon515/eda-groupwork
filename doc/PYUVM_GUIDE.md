@@ -1,363 +1,158 @@
-# pyuvm/cocotb 异步 FIFO 验证平台学习指南
+# pyuvm/cocotb 异步 FIFO 验证平台指南
 
 ## 文档概述
 
-本文档以本项目已经构建完成的 `prj_src/design_rv1_tv7/FIFO/pyuvm_work/` 为例，说明如何从现有异步 FIFO RTL 出发，搭建一个基于 **cocotb + pyuvm + Verilator** 的 Python 验证平台。本文重点解释平台结构、构建方法、Python `assert` 判断方式和常用运行命令，便于学习和复现。
+本文档说明当前项目中的标准化 **pyuvm + cocotb + Verilator** 异步 FIFO 验证平台。当前平台位于：
 
-这套平台是对原有 SystemVerilog UVM 平台的补充，不替代 `uvm_src/` 和 `uvm_work/`。原 UVM 平台仍然保留；新平台用于演示老师建议的 pyuvm/cocotb 验证方式，并且所有 pass/fail 判断都由 Python `assert` 完成。
+```text
+prj_src/pyuvm_work/
+```
 
----
-
-## 为什么引入 pyuvm/cocotb
-
-原项目已经有完整的 SystemVerilog UVM 验证环境，包括 interface、driver、monitor、sequence、scoreboard 和 test。该环境适合商业仿真器和传统 UVM 学习，但本机当前没有 VCS/Verdi 等商业工具，因此新增 pyuvm/cocotb 平台有两个目的：
-
-1. **使用开源工具运行验证**：cocotb 可以配合 OSS CAD Suite 中的 Verilator 运行，不依赖商业仿真器。
-2. **用 Python 表达验证逻辑**：pyuvm 提供类似 UVM 的 test/component 概念，scoreboard 和断言可以用 Python 编写，更适合快速学习和调试。
-
-在本项目中，pyuvm 平台仍然验证同一个 RTL 顶层 `async_fifo_top`。它只编译 RTL 文件，不编译 `uvm_src/` 中的 SystemVerilog UVM 文件；这样可以避免 UVM class/interface 对 Verilator/cocotb 流程造成不必要的依赖。
+它验证同一个 RTL 顶层 `async_fifo_top`，只编译 `prj_src/rtl_src/` 下的 RTL 文件，不编译 `prj_src/uvm_src/` 中的 SystemVerilog UVM 平台。原 SV UVM 平台仍保留；pyuvm 平台用于开源工具链下的 Python/UVM-style 验证。
 
 ---
 
 ## 环境准备
 
-pyuvm 平台的环境文件位于：
+环境文件：
 
 ```text
-prj_src/design_rv1_tv7/FIFO/pyuvm_work/environment.yml
+prj_src/pyuvm_work/environment.yml
 ```
 
-当前内容定义了一个新的 conda 环境：
-
-```yaml
-name: eda-pyuvm-fifo
-channels:
-  - conda-forge
-dependencies:
-  - python=3.11
-  - pip
-  - make
-  - pip:
-      - cocotb==2.0.1
-      - pyuvm==4.0.1
-```
-
-创建环境：
+创建或更新 conda 环境后，建议用下面命令检查依赖：
 
 ```bash
-conda env create -f prj_src/design_rv1_tv7/FIFO/pyuvm_work/environment.yml
+conda run -n eda-pyuvm-fifo python -c "import cocotb, pyuvm, cocotb_coverage; print('ok')"
 ```
 
-激活环境：
-
-```bash
-conda activate eda-pyuvm-fifo
-```
-
-检查 Python 包和 `assert` 是否启用：
-
-```bash
-conda run -n eda-pyuvm-fifo python -c "import sys; assert not sys.flags.optimize; import cocotb, pyuvm; print(cocotb.__version__)"
-```
-
-期望输出中包含：
-
-```text
-2.0.1
-```
-
-注意：Verilator 不由 conda 安装，而是由 OSS CAD Suite 提供，并且需要已经在 shell 的 `PATH` 中。可用下面命令检查：
-
-```bash
-verilator --version
-```
+Verilator 由 OSS CAD Suite 提供，不在 conda 环境中全局安装。运行前确认 `verilator --version` 可用。
 
 ---
 
-## 目录结构
-
-新增的 pyuvm 工作目录为：
+## 当前目录结构
 
 ```text
-prj_src/design_rv1_tv7/FIFO/pyuvm_work/
-├── environment.yml
+prj_src/pyuvm_work/
 ├── Makefile
+├── environment.yml
 ├── test_async_fifo.py
+├── coverage/
+│   ├── fifo_coverage.xml
+│   └── fifo_coverage.yml
 └── pyuvm_fifo/
     ├── __init__.py
+    ├── fifo_agent.py
     ├── fifo_bfm.py
+    ├── fifo_config.py
+    ├── fifo_coverage.py
     ├── fifo_env.py
+    ├── fifo_item.py
     ├── fifo_scoreboard.py
-    └── fifo_transaction.py
+    └── fifo_sequences.py
 ```
-
-各文件作用如下：
 
 | 文件 | 作用 |
 | :--- | :--- |
-| `environment.yml` | 定义 conda 环境 `eda-pyuvm-fifo`，安装 Python、make、cocotb 和 pyuvm。 |
-| `Makefile` | cocotb/Verilator 构建入口，指定 RTL 文件、参数覆盖、测试筛选和回归目标。 |
-| `test_async_fifo.py` | pyuvm 测试入口，包含所有 `@pyuvm.test()` 测试类。 |
-| `pyuvm_fifo/fifo_bfm.py` | Python BFM/helper，负责启动写时钟/读时钟、复位、写一个数据、读一个数据。 |
-| `pyuvm_fifo/fifo_scoreboard.py` | Python scoreboard，用队列保存期望数据，用 `assert` 比较读出数据和标志位。 |
-| `pyuvm_fifo/fifo_transaction.py` | 简单 transaction 数据结构，保存数据、读写方向和延迟。 |
-| `pyuvm_fifo/fifo_env.py` | 精简 pyuvm 环境骨架，保留 driver/monitor/env 的 UVM 概念映射。 |
-| `pyuvm_fifo/__init__.py` | 包导出入口，便于测试文件直接导入 BFM、scoreboard 和 transaction。 |
+| `Makefile` | cocotb/Verilator 构建入口；支持参数覆盖、单测试筛选和回归目标。 |
+| `test_async_fifo.py` | pyuvm 测试入口；测试类通过环境和序列启动激励。 |
+| `fifo_config.py` | `FifoConfig` 配置对象和 ConfigDB helper，集中管理 DUT 参数、时钟、复位和延迟配置。 |
+| `fifo_item.py` | typed command/observation items；避免使用无类型 dict 作为 transaction。 |
+| `fifo_sequences.py` | reusable write/read/virtual sequences，包括 burst、boundary、random、FWFT 和 OUT_REG 场景。 |
+| `fifo_agent.py` | write/read sequencer、driver、monitor、agent；driver 从 sequencer 取 command，monitor 采样公开端口。 |
+| `fifo_scoreboard.py` | monitor-driven reference model scoreboard；只根据 monitor observation 更新模型。 |
+| `fifo_coverage.py` | `cocotb-coverage` functional/cross coverage collector，并导出 XML/YAML。 |
+| `fifo_env.py` | 标准 pyuvm 环境装配层，连接 agents、scoreboard 和 coverage。 |
+| `fifo_bfm.py` | 低层 clock/reset helper；不再用于场景激励的直接 `write_word()`/`read_word()` 操作。 |
 
 ---
 
-## Makefile 构建方法
+## 验证平台结构
 
-pyuvm 工作目录中的 Makefile 默认使用 Verilator：
+当前 pyuvm 平台是 env/sequence-driven，而不是旧的 direct-BFM scenario suite：
 
-```makefile
-SIM ?= verilator
-TOPLEVEL_LANG ?= verilog
-TOPLEVEL ?= async_fifo_top
-MODULE ?= test_async_fifo
-TESTCASE ?= FifoSmokeTest
-```
+1. 测试类在 `test_async_fifo.py` 中创建 `FifoConfig`，启动时钟/复位，并构建 `FifoEnv`。
+2. 场景激励通过 `fifo_sequences.py` 中的 sequence 发送到 write/read sequencer。
+3. `FifoWriteDriver` 和 `FifoReadDriver` 从 sequencer 获取 typed command item，然后驱动 `winc/rinc/wdata`。
+4. `FifoWriteMonitor` 和 `FifoReadMonitor` 在 clock edge 后使用 `ReadOnly()` 采样公开输出和控制信号，发布 observation item。
+5. Scoreboard 和 coverage 只消费 monitor observation，不从 driver command 直接更新参考模型。
 
-含义如下：
-
-| 变量 | 含义 |
-| :--- | :--- |
-| `SIM` | cocotb 使用的仿真器，默认 `verilator`。 |
-| `TOPLEVEL_LANG` | 顶层语言，当前 RTL 是 SystemVerilog/Verilog 风格，设置为 `verilog`。 |
-| `TOPLEVEL` | DUT 顶层模块名，本项目是 `async_fifo_top`。 |
-| `MODULE` | cocotb Python 测试模块名，本项目是 `test_async_fifo`。 |
-| `TESTCASE` | 用户友好的测试类选择变量，例如 `FifoSmokeTest`。 |
-
-### 编译的 RTL 文件
-
-cocotb/Verilator 流程只编译下面六个 RTL 文件，并按此顺序传入：
-
-```makefile
-../rtl_src/fifo_cfg_pkg.sv
-../rtl_src/sync_gray.sv
-../rtl_src/dual_port_ram.sv
-../rtl_src/wptr.sv
-../rtl_src/rptr.sv
-../rtl_src/async_fifo_top.sv
-```
-
-其中 `fifo_cfg_pkg.sv` 必须先编译，因为后续 RTL 会 import 该 package。
-
-本流程明确不编译这些 SV UVM 文件：
-
-```text
-../uvm_src/fifo_if.sv
-../uvm_src/tb_top.sv
-../uvm_src/*.sv UVM class 文件
-```
-
-这样做的原因是 cocotb 直接通过 VPI 访问 RTL 顶层端口，不需要 SystemVerilog interface 和 UVM class testbench。
-
-### 参数覆盖
-
-Makefile 中提供了 FIFO 参数变量：
-
-```makefile
-DEPTH ?= 16
-WIDTH ?= 16
-FWFT_EN ?= 0
-OUT_REG_EN ?= 0
-SYNC_STAGES ?= 2
-ALMOST_FULL_EN ?= 0
-ALMOST_FULL_VAL ?= 4
-ALMOST_EMPTY_EN ?= 0
-ALMOST_EMPTY_VAL ?= 4
-```
-
-这些变量通过 Verilator 的 `-G` 参数传给 RTL，例如：
-
-```makefile
-EXTRA_ARGS += -GDEPTH=$(DEPTH)
-EXTRA_ARGS += -GWIDTH=$(WIDTH)
-EXTRA_ARGS += -GFWFT_EN=$(FWFT_EN)
-```
-
-因此可以在命令行覆盖参数，例如：
-
-```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator TESTCASE=FifoAlmostFlagsTest DEPTH=8 ALMOST_FULL_EN=1 ALMOST_FULL_VAL=2 ALMOST_EMPTY_EN=1 ALMOST_EMPTY_VAL=2
-```
-
-### 为什么使用 testcase-specific results 文件
-
-Makefile 中的 `run` 目标会把每个测试的结果文件设置为：
-
-```makefile
-results-$(TESTCASE).xml
-```
-
-这样做是为了避免连续回归时所有测试共用 `results.xml`，导致 make 误判目标已经最新、跳过某些测试。
-
-### 为什么使用 parameter-specific SIM_BUILD
-
-Makefile 会把参数组合编码到 `SIM_BUILD` 路径中：
-
-```makefile
-sim_build/$(SIM)-d$(DEPTH)-w$(WIDTH)-fw$(FWFT_EN)-out$(OUT_REG_EN)-sync$(SYNC_STAGES)-af$(ALMOST_FULL_EN)-afv$(ALMOST_FULL_VAL)-ae$(ALMOST_EMPTY_EN)-aev$(ALMOST_EMPTY_VAL)
-```
-
-这样做是为了防止 Verilator 在不同参数配置之间复用旧的可执行文件。例如 `FWFT_EN=1`、`OUT_REG_EN=1`、`ALMOST_FULL_EN=1` 都会改变 RTL generate 分支，如果复用旧 build，就可能运行了错误配置。
+这种结构更接近标准 UVM：sequence 负责“要做什么”，driver 负责“怎样驱动 pin”，monitor/scoreboard/coverage 负责独立观察和检查。
 
 ---
 
-## pyuvm 平台结构
-
-本平台保留了 UVM 的核心思想，但用 Python 实现。
-
-| SV UVM 概念 | pyuvm/cocotb 中的实现 |
-| :--- | :--- |
-| transaction | `FifoTransaction`，保存数据、方向和延迟。 |
-| driver/BFM | `fifo_bfm.py` 中的 `write_word()`、`read_word()`、`reset_fifo()`。 |
-| monitor | 当前平台用 BFM 和 scoreboard 直接检查核心行为，`FifoMonitor` 是保留的结构骨架。 |
-| scoreboard | `FifoScoreboard`，维护期望队列并比较读出数据。 |
-| test | `test_async_fifo.py` 中的 `@pyuvm.test()` 类。 |
-
-### BFM
-
-`fifo_bfm.py` 中的核心函数：
-
-```python
-start_clocks(dut, w_period_ns=10, r_period_ns=14)
-reset_fifo(dut)
-write_word(dut, data, delay=0)
-read_word(dut, delay=0, latency=1)
-```
-
-本项目使用不同周期的写时钟和读时钟，默认写时钟 10ns、读时钟 14ns，用于体现异步 FIFO 的跨时钟特性。复位为低有效：`wrst=0`、`rrst=0` 表示复位有效；释放后为 `wrst=1`、`rrst=1`。
-
-### Scoreboard
-
-`FifoScoreboard` 用 `deque` 保存写入的期望数据：
-
-```python
-push_write(data)
-pop_and_check(actual)
-assert_empty()
-check_flags(dut)
-```
-
-写入时 scoreboard 把数据 mask 到当前 `WIDTH`；读取时弹出队首期望值并与 `actual` 比较。若数据顺序错误、读多了、最后还有未读数据，都会触发 Python `assert`。
-
-### 测试类
-
-`test_async_fifo.py` 中已经实现的测试包括：
-
-| 测试类 | 目的 |
-| :--- | :--- |
-| `FifoSmokeTest` | 最小冒烟测试，确认 DUT 句柄存在并完成复位。 |
-| `FifoResetTest` | 检查复位释放后空/满及控制信号状态。 |
-| `FifoSingleWriteReadTest` | 写入一个数据并读回。 |
-| `FifoDelayBehaviorTest` | 带不同写读延迟的数据顺序测试。 |
-| `FifoOrderPreservationTest` | 多数据写入后按 FIFO 顺序读出。 |
-| `FifoMultiItemDrainTest` | 写入半深度数据后全部 drain，并检查最终空状态。 |
-| `FifoFullEmptyBoundaryTest` | `DEPTH=8` 下写满、阻止溢出写、再读空。 |
-| `FifoEmptyReadProtectionTest` | 空 FIFO 上读脉冲不应产生非法数据。 |
-| `FifoAlmostFlagsTest` | 近满/近空标志在稳定后正确断言。 |
-| `FifoAsyncSimultaneousReadWriteTest` | 独立读写协程并发运行，检查无数据破坏。 |
-| `FifoRandomRegressionTest` | 固定 seed `0xEDA2026` 的 200 次随机操作。 |
-| `FifoStressTest` | 固定 seed `0xF1F0` 的 1000 次有界压力操作。 |
-| `FifoFwftDirectTest` | `FWFT_EN=1 OUT_REG_EN=0` 下检查首字直通行为。 |
-| `FifoOutRegLatencyTest` | `OUT_REG_EN=1` 下检查标准模式两拍读延迟。 |
-
----
-
-## assert 判断方法
-
-本平台只使用 Python `assert` 作为 pass/fail 判断方式，没有新增 SystemVerilog assertion。
-
-例如，复位状态检查：
-
-```python
-assert resolve_signal_value(dut, "rempty") == 1, "FIFO should be empty after reset"
-assert resolve_signal_value(dut, "wfull") == 0, "FIFO should not be full after reset"
-```
-
-数据比较检查：
-
-```python
-assert observed == expected, (
-    f"FIFO data mismatch: expected 0x{expected:04X}, got 0x{observed:04X}"
-)
-```
-
-最终状态检查：
-
-```python
-scoreboard.assert_empty()
-```
-
-必须注意：Python 的 `assert` 在优化模式下会被关闭。如果使用 `python -O`，这些判断不会执行。因此测试文件开头会检查：
-
-```python
-assert not sys.flags.optimize, "Python asserts must remain enabled"
-```
-
-运行平台时不要使用 `python -O`，也不要设置会让 Python 进入优化模式的环境变量。
-
----
-
-## 运行命令
+## Makefile 运行命令
 
 以下命令均从仓库根目录执行。
 
-### 单个 smoke test
+### 单个测试
+
+默认测试为 `FifoEnvSmokeTest`：
 
 ```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator TESTCASE=FifoSmokeTest
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run
 ```
 
-### 基础回归
-
-包含 smoke、reset、单次写读、延迟行为测试：
+指定测试类：
 
 ```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator regression-basic
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run TESTCASE=FifoResetTest
 ```
 
-### 核心数据顺序回归
+### 参数覆盖
 
-包含基础测试和 scoreboard/order 测试：
+Makefile 支持 RTL 参数覆盖，例如 DEPTH、WIDTH、FWFT、OUT_REG 和 almost flag 参数：
 
 ```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator regression-core
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run \
+  TESTCASE=FifoAlmostFlagsCoverageTest \
+  DEPTH=8 ALMOST_FULL_EN=1 ALMOST_FULL_VAL=2 \
+  ALMOST_EMPTY_EN=1 ALMOST_EMPTY_VAL=2
 ```
 
-### 边界与近满/近空回归
-
-包含 full/empty、empty read protection、almost flag 测试：
+### 回归目标
 
 ```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator regression-boundary
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work regression-basic
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work regression-boundary
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work regression-advanced
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work regression-modes
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work regression
 ```
 
-### 高级回归
+`regression` 会覆盖 smoke/basic、boundary、advanced、FWFT 和 OUT_REG latency 模式测试。
 
-包含异步并发、随机、压力、FWFT 和 OUT_REG 模式测试：
+---
 
-```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator regression-advanced
+## 当前测试类
+
+| 测试类 | 目的 |
+| :--- | :--- |
+| `FifoEnvSmokeTest` | 环境构建和最小 smoke。 |
+| `FifoAgentSmokeTest` | write/read agent、sequencer、driver、monitor 基本连通性。 |
+| `FifoResetTest` | 复位后公开标志和控制状态。 |
+| `FifoSingleWriteReadTest` | 单次 sequence-driven 写入和读出。 |
+| `FifoBoundaryTest` | full/empty 边界以及 blocked overflow/underflow attempts。 |
+| `FifoAlmostFlagsCoverageTest` | almost full/empty 参数模式下的覆盖采样。 |
+| `FifoConcurrentReadWriteTest` | 并发读写虚拟序列 smoke。 |
+| `FifoRandomRegressionTest` | 固定 seed 的随机回归 smoke。 |
+| `FifoStressTest` | 保守压力场景 smoke。 |
+| `FifoCoverageClosureTest` | 覆盖导出和边界覆盖场景。 |
+| `FifoFwftTest` | `FWFT_EN=1` 模式检查。 |
+| `FifoOutRegLatencyTest` | `OUT_REG_EN=1` 读延迟模式检查。 |
+
+---
+
+## 覆盖率报告
+
+覆盖率由 `pyuvm_fifo/fifo_coverage.py` 使用 `cocotb-coverage` 收集，回归或单测结束后导出：
+
+```text
+prj_src/pyuvm_work/coverage/fifo_coverage.xml
+prj_src/pyuvm_work/coverage/fifo_coverage.yml
 ```
 
-### 完整 pyuvm 回归
-
-完整回归会依次运行 smoke、basic、core、boundary 和 advanced：
-
-```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work SIM=verilator regression
-```
-
-### 清理生成物
-
-```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work clean
-```
-
-该命令会删除 `sim_build/`、`results.xml`、`results-*.xml`、`*.vcd`、`*.fst`、`__pycache__` 和 `.pytest_cache`。
+报告包含 operation、attempted/accepted、data pattern、occupancy region、public flag，以及 operation/flag cross 等 coverpoints/crosses。不要把文件存在理解为 100% coverage；当前报告会明确列出 uncovered bins，例如未命中的 data pattern、full/almost flag 和部分 cross bins。
 
 ---
 
@@ -365,68 +160,39 @@ conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work clean
 
 ### 1. `verilator: command not found`
 
-说明 OSS CAD Suite 没有正确加入 `PATH`。需要先进入或 source OSS CAD Suite 环境，再执行：
+说明 OSS CAD Suite 没有正确加入 `PATH`。先确认：
 
 ```bash
 verilator --version
 ```
 
-确认可见后再运行 cocotb/pyuvm 测试。
+### 2. conda 环境不存在
 
-### 2. `conda run -n eda-pyuvm-fifo ...` 找不到环境
-
-说明环境还没有创建，先运行：
+使用项目环境文件创建环境：
 
 ```bash
-conda env create -f prj_src/design_rv1_tv7/FIFO/pyuvm_work/environment.yml
+conda env create -f prj_src/pyuvm_work/environment.yml
 ```
 
-### 3. Python assert 没有效果
+### 3. 参数模式像是旧配置
 
-检查是否误用了 `python -O`。本平台依赖 Python `assert` 判断数据和标志位，优化模式会关闭断言，因此禁止使用。
-
-### 4. cocotb 找不到测试模块
-
-确认 Makefile 中 `MODULE ?= test_async_fifo`，并且命令从仓库根目录使用 `make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work ...` 执行。不要把 `MODULE` 改成文件路径。
-
-### 5. 参数模式不对或测试结果像是旧配置
-
-本 Makefile 已经把参数组合编码进 `SIM_BUILD`，正常情况下不同参数会生成不同 build 目录。如果手动修改了 Makefile 或直接复用旧可执行文件，建议先执行：
+Makefile 会把参数组合编码到 `sim_build/` 路径中，避免不同参数复用同一个 Verilator 可执行文件。若怀疑缓存问题，可清理后重跑：
 
 ```bash
-conda run -n eda-pyuvm-fifo make -C prj_src/design_rv1_tv7/FIFO/pyuvm_work clean
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work clean
 ```
 
-再重新运行测试。
+### 4. 为什么测试不直接调用 `write_word()` / `read_word()`？
 
-### 6. 某些标志位不能在同一拍立即判断
-
-异步 FIFO 的满/空/近满/近空标志依赖跨时钟同步，测试中会等待额外的写时钟或读时钟后再严格断言。这不是放宽检查，而是避免在 CDC 传播尚未稳定时做错误判断。
-
----
-
-## 与原 UVM 平台对比
-
-| 对比项 | 原 SV UVM 平台 | 新 pyuvm/cocotb 平台 |
-| :--- | :--- | :--- |
-| 仿真入口 | `uvm_work/Makefile` | `pyuvm_work/Makefile` |
-| 主要语言 | SystemVerilog/UVM | Python + pyuvm + cocotb |
-| 默认工具链 | 原流程偏商业仿真器 | OSS CAD Suite Verilator |
-| DUT 连接方式 | SV interface + UVM agent | cocotb 通过 DUT 端口句柄直接访问 |
-| 激励方式 | sequence/driver | Python BFM/helper + pyuvm test |
-| 数据检查 | SV scoreboard | Python `FifoScoreboard` |
-| pass/fail 判断 | UVM report/scoreboard | Python `assert` |
-| 覆盖率目标 | 原 UVM 平台更适合覆盖率闭合 | 本平台主要演示功能验证和断言判断 |
-
-两套平台验证的是同一个异步 FIFO RTL。学习时可以先用 pyuvm/cocotb 理解基本测试结构和数据检查，再对照原 UVM 平台理解完整的 UVM 组件划分、coverage 和 sequence 机制。
+这些 helper 只适合低层 bootstrap 或早期 scaffold。当前标准平台要求场景激励经过 sequence、sequencer 和 driver，这样 monitor-driven scoreboard 才能独立验证 DUT 行为，而不是把测试意图直接当成通过依据。
 
 ---
 
 ## 建议学习顺序
 
-1. 先阅读 `environment.yml` 和 Makefile，确认环境与构建入口。
-2. 运行 `FifoSmokeTest`，确认 Verilator/cocotb/pyuvm 能启动。
-3. 阅读 `fifo_bfm.py`，理解 Python 如何驱动 `wclk/rclk/winc/rinc/wdata`。
-4. 阅读 `fifo_scoreboard.py`，理解期望队列和数据比较。
-5. 阅读 `test_async_fifo.py` 中的测试类，从 `FifoSingleWriteReadTest` 逐步看到 random/stress/FWFT/OUT_REG。
-6. 最后运行完整 `regression`，确认所有 Python assert 检查都通过。
+1. 阅读 `Makefile` 和 `fifo_config.py`，理解参数如何进入 DUT 和 pyuvm ConfigDB。
+2. 阅读 `fifo_item.py` 和 `fifo_sequences.py`，理解 command/observation item 与 sequence stimulus。
+3. 阅读 `fifo_agent.py`，理解 driver/monitor 如何按不同 clock domain 工作。
+4. 阅读 `fifo_scoreboard.py`，确认 reference model 只由 monitor observation 更新。
+5. 阅读 `fifo_coverage.py`，查看 coverage bins 和 XML/YAML 导出。
+6. 运行 `FifoAgentSmokeTest`，再运行完整 `regression`。

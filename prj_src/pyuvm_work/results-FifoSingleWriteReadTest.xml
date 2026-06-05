@@ -1,44 +1,38 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1780544053" />
-    <testcase name="FifoSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="142" time="0" sim_time_ns="0" ratio_time="0">
+    <property name="random_seed" value="1780635296" />
+    <testcase name="FifoEnvSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="207" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoResetTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="153" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoAgentSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="216" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoSingleWriteReadTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="167" time="0.0008075237274169922" sim_time_ns="224.0" ratio_time="277391.2299970475" />
-    <testcase name="FifoDelayBehaviorTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="186" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoResetTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="224" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoOrderPreservationTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="214" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoSingleWriteReadTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="232" time="0.030895233154296875" sim_time_ns="560.0" ratio_time="18125.773552290408" />
+    <testcase name="FifoBoundaryTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="240" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoMultiItemDrainTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="241" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoAlmostFlagsCoverageTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="252" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoFullEmptyBoundaryTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="273" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoRandomRegressionTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="272" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoEmptyReadProtectionTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="317" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoStressTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="288" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoAlmostFlagsTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="336" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoConcurrentReadWriteTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="303" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoAsyncSimultaneousReadWriteTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="401" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoFwftTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="316" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoRandomRegressionTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="445" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoOutRegLatencyTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="325" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoStressTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="484" time="0" sim_time_ns="0" ratio_time="0">
-      <skipped />
-    </testcase>
-    <testcase name="FifoFwftDirectTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="519" time="0" sim_time_ns="0" ratio_time="0">
-      <skipped />
-    </testcase>
-    <testcase name="FifoOutRegLatencyTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="550" time="0" sim_time_ns="0" ratio_time="0">
+    <testcase name="FifoCoverageClosureTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="335" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
   </testsuite>

@@ -7,4 +7,6 @@ dependencies:
   - make
   - pip:
       - cocotb==2.0.1
+      - cocotb-coverage
       - pyuvm==4.0.1
+      - pytest

@@ -1,0 +1,79 @@
+<top abs_name="top" size="49" coverage="21" cover_percentage="42.86">
+  <fifo size="49" coverage="21" cover_percentage="42.86" abs_name="top.fifo">
+    <operation size="2" coverage="2" cover_percentage="100.0" abs_name="top.fifo.operation" weight="1" at_least="1">
+      <bin0 bin="write" hits="48" abs_name="top.fifo.operation.bin0" />
+      <bin1 bin="read" hits="35" abs_name="top.fifo.operation.bin1" />
+    </operation>
+    <attempted size="2" coverage="2" cover_percentage="100.0" abs_name="top.fifo.attempted" weight="1" at_least="1">
+      <bin0 bin="False" hits="81" abs_name="top.fifo.attempted.bin0" />
+      <bin1 bin="True" hits="2" abs_name="top.fifo.attempted.bin1" />
+    </attempted>
+    <accepted size="2" coverage="2" cover_percentage="100.0" abs_name="top.fifo.accepted" weight="1" at_least="1">
+      <bin0 bin="False" hits="81" abs_name="top.fifo.accepted.bin0" />
+      <bin1 bin="True" hits="2" abs_name="top.fifo.accepted.bin1" />
+    </accepted>
+    <data_pattern size="5" coverage="2" cover_percentage="40.0" abs_name="top.fifo.data_pattern" weight="1" at_least="1">
+      <bin0 bin="zero" hits="17" abs_name="top.fifo.data_pattern.bin0" />
+      <bin1 bin="all_ones" hits="0" abs_name="top.fifo.data_pattern.bin1" />
+      <bin2 bin="alternating_a" hits="0" abs_name="top.fifo.data_pattern.bin2" />
+      <bin3 bin="alternating_5" hits="0" abs_name="top.fifo.data_pattern.bin3" />
+      <bin4 bin="other" hits="66" abs_name="top.fifo.data_pattern.bin4" />
+    </data_pattern>
+    <occupancy_region size="6" coverage="2" cover_percentage="33.33" abs_name="top.fifo.occupancy_region" weight="1" at_least="1">
+      <bin0 bin="empty" hits="30" abs_name="top.fifo.occupancy_region.bin0" />
+      <bin1 bin="one" hits="53" abs_name="top.fifo.occupancy_region.bin1" />
+      <bin2 bin="low" hits="0" abs_name="top.fifo.occupancy_region.bin2" />
+      <bin3 bin="mid" hits="0" abs_name="top.fifo.occupancy_region.bin3" />
+      <bin4 bin="almost_full_region" hits="0" abs_name="top.fifo.occupancy_region.bin4" />
+      <bin5 bin="full" hits="0" abs_name="top.fifo.occupancy_region.bin5" />
+    </occupancy_region>
+    <flags size="8" coverage="5" cover_percentage="62.5" abs_name="top.fifo.flags">
+      <wfull size="2" coverage="1" cover_percentage="50.0" abs_name="top.fifo.flags.wfull" weight="1" at_least="1">
+        <bin0 bin="False" hits="83" abs_name="top.fifo.flags.wfull.bin0" />
+        <bin1 bin="True" hits="0" abs_name="top.fifo.flags.wfull.bin1" />
+      </wfull>
+      <rempty size="2" coverage="2" cover_percentage="100.0" abs_name="top.fifo.flags.rempty" weight="1" at_least="1">
+        <bin0 bin="False" hits="4" abs_name="top.fifo.flags.rempty.bin0" />
+        <bin1 bin="True" hits="79" abs_name="top.fifo.flags.rempty.bin1" />
+      </rempty>
+      <walmost_full size="2" coverage="1" cover_percentage="50.0" abs_name="top.fifo.flags.walmost_full" weight="1" at_least="1">
+        <bin0 bin="False" hits="83" abs_name="top.fifo.flags.walmost_full.bin0" />
+        <bin1 bin="True" hits="0" abs_name="top.fifo.flags.walmost_full.bin1" />
+      </walmost_full>
+      <ralmost_empty size="2" coverage="1" cover_percentage="50.0" abs_name="top.fifo.flags.ralmost_empty" weight="1" at_least="1">
+        <bin0 bin="False" hits="83" abs_name="top.fifo.flags.ralmost_empty.bin0" />
+        <bin1 bin="True" hits="0" abs_name="top.fifo.flags.ralmost_empty.bin1" />
+      </ralmost_empty>
+    </flags>
+    <cross size="24" coverage="6" cover_percentage="25.0" abs_name="top.fifo.cross">
+      <operation_attempt_accept size="8" coverage="4" cover_percentage="50.0" abs_name="top.fifo.cross.operation_attempt_accept" weight="1" at_least="1">
+        <bin0 bin="('write', False, False)" hits="47" abs_name="top.fifo.cross.operation_attempt_accept.bin0" />
+        <bin1 bin="('write', False, True)" hits="0" abs_name="top.fifo.cross.operation_attempt_accept.bin1" />
+        <bin2 bin="('write', True, False)" hits="0" abs_name="top.fifo.cross.operation_attempt_accept.bin2" />
+        <bin3 bin="('write', True, True)" hits="1" abs_name="top.fifo.cross.operation_attempt_accept.bin3" />
+        <bin4 bin="('read', False, False)" hits="34" abs_name="top.fifo.cross.operation_attempt_accept.bin4" />
+        <bin5 bin="('read', False, True)" hits="0" abs_name="top.fifo.cross.operation_attempt_accept.bin5" />
+        <bin6 bin="('read', True, False)" hits="0" abs_name="top.fifo.cross.operation_attempt_accept.bin6" />
+        <bin7 bin="('read', True, True)" hits="1" abs_name="top.fifo.cross.operation_attempt_accept.bin7" />
+      </operation_attempt_accept>
+      <required_flag_state size="16" coverage="2" cover_percentage="12.5" abs_name="top.fifo.cross.required_flag_state" weight="1" at_least="1">
+        <bin0 bin="(False, False, False, False)" hits="4" abs_name="top.fifo.cross.required_flag_state.bin0" />
+        <bin1 bin="(False, False, False, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin1" />
+        <bin2 bin="(False, False, True, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin2" />
+        <bin3 bin="(False, False, True, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin3" />
+        <bin4 bin="(False, True, False, False)" hits="79" abs_name="top.fifo.cross.required_flag_state.bin4" />
+        <bin5 bin="(False, True, False, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin5" />
+        <bin6 bin="(False, True, True, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin6" />
+        <bin7 bin="(False, True, True, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin7" />
+        <bin8 bin="(True, False, False, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin8" />
+        <bin9 bin="(True, False, False, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin9" />
+        <bin10 bin="(True, False, True, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin10" />
+        <bin11 bin="(True, False, True, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin11" />
+        <bin12 bin="(True, True, False, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin12" />
+        <bin13 bin="(True, True, False, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin13" />
+        <bin14 bin="(True, True, True, False)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin14" />
+        <bin15 bin="(True, True, True, True)" hits="0" abs_name="top.fifo.cross.required_flag_state.bin15" />
+      </required_flag_state>
+    </cross>
+  </fifo>
+</top>

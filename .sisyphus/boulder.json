@@ -1,94 +1,100 @@
 {
-  "active_plan": "/home/joon/project/eda-groupwork/.sisyphus/plans/pyuvm-fifo-platform.md",
+  "active_plan": "/home/joon/project/eda-groupwork/.sisyphus/plans/pyuvm-fifo-complete-env.md",
   "started_at": "2026-06-02T07:47:43.763Z",
   "session_ids": [
     "ses_178caf1d5ffe058Fs0AQaIYqnT",
     "ses_178b214d8fferIoTcRvQ0ObqZq",
     "ses_178b2141fffe2mJ823KAPMBbU7",
     "ses_178b213f9ffeax0RhyDZzEAE13",
-    "ses_178b21392ffeDTuu2nE0CuM3Gt"
+    "ses_178b21392ffeDTuu2nE0CuM3Gt",
+    "ses_16e3d7008ffe4VJBk3cgzjOmB1",
+    "ses_16e1f6dceffeOyNBrji6cVW9Pq",
+    "ses_16e1f6cfeffeRSOZWljHDzOMhz"
   ],
   "session_origins": {
     "ses_178caf1d5ffe058Fs0AQaIYqnT": "direct",
     "ses_178b214d8fferIoTcRvQ0ObqZq": "appended",
     "ses_178b2141fffe2mJ823KAPMBbU7": "appended",
     "ses_178b213f9ffeax0RhyDZzEAE13": "appended",
-    "ses_178b21392ffeDTuu2nE0CuM3Gt": "appended"
+    "ses_178b21392ffeDTuu2nE0CuM3Gt": "appended",
+    "ses_16e3d7008ffe4VJBk3cgzjOmB1": "direct",
+    "ses_16e1f6dceffeOyNBrji6cVW9Pq": "appended",
+    "ses_16e1f6cfeffeRSOZWljHDzOMhz": "appended"
   },
-  "plan_name": "pyuvm-fifo-platform",
+  "plan_name": "pyuvm-fifo-complete-env",
   "agent": "atlas",
   "task_sessions": {
     "todo:1": {
       "task_key": "todo:1",
       "task_label": "1",
-      "task_title": "Create conda environment manifest and Python dependency checks",
-      "session_id": "ses_178b06e95ffeWR6LjDMkHorikt",
-      "agent": "Sisyphus-Junior",
-      "category": "quick",
-      "updated_at": "2026-06-02T07:52:44.394Z"
+      "task_title": "Update dependencies and lock PyUVM config contract",
+      "session_id": "ses_16e1f6cfeffeRSOZWljHDzOMhz",
+      "agent": "librarian",
+      "category": "",
+      "updated_at": "2026-06-04T09:10:23.100Z"
     },
     "todo:2": {
       "task_key": "todo:2",
       "task_label": "2",
-      "task_title": "Add cocotb/Verilator Makefile and smoke elaboration test",
-      "session_id": "ses_178aabf67ffe9fWOwtacFOV4xh",
+      "task_title": "Replace transaction model with sequence and observation items",
+      "session_id": "ses_16e1144f8ffeDAWu5UvJc3IFZP",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:01:02.290Z"
+      "updated_at": "2026-06-04T09:23:44.513Z"
     },
     "todo:3": {
       "task_key": "todo:3",
       "task_label": "3",
-      "task_title": "Build pyuvm FIFO package, clocks, reset helper, and BFMs",
-      "session_id": "ses_178a37b1affebFx07B5eqqtMlv",
+      "task_title": "Implement reusable write/read agents, drivers, monitors, sequencers",
+      "session_id": "ses_16e07f585ffe284tZxeDf0syaC",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:07:30.254Z"
+      "updated_at": "2026-06-04T09:34:51.949Z"
     },
     "todo:4": {
       "task_key": "todo:4",
       "task_label": "4",
-      "task_title": "Add reset, single write/read, and delay behavior pyuvm tests",
-      "session_id": "ses_1789db081ffeBbYoQ6ypvPhcgn",
+      "task_title": "Upgrade scoreboard into UVM component with reference model",
+      "session_id": "ses_16e011936ffeQzOpg6TAcdFcGv",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:13:24.679Z"
+      "updated_at": "2026-06-04T09:43:42.882Z"
     },
     "todo:5": {
       "task_key": "todo:5",
       "task_label": "5",
-      "task_title": "Add Python scoreboard and FIFO ordering tests",
-      "session_id": "ses_1789805adffeoWxcaupTur2gcZ",
+      "task_title": "Implement cocotb-coverage collector and reports",
+      "session_id": "ses_16df64601ffep3tLAvzUGGIKgS",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:19:44.060Z"
+      "updated_at": "2026-06-04T09:53:39.765Z"
     },
     "todo:6": {
       "task_key": "todo:6",
       "task_label": "6",
-      "task_title": "Add boundary, full/empty, and almost flag tests",
-      "session_id": "ses_1788eab29ffeQhGH8fmlz3kTEO",
+      "task_title": "Assemble `FifoEnv` with standard phases",
+      "session_id": "ses_16df10c57ffeHTNu94lok5EkPL",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:38:16.301Z"
+      "updated_at": "2026-06-04T09:59:47.410Z"
     },
     "todo:7": {
       "task_key": "todo:7",
       "task_label": "7",
-      "task_title": "Add async simultaneous, random, stress, and FWFT/OUT_REG mode tests",
-      "session_id": "ses_178826a11ffeEnyvmnIrMqJRox",
+      "task_title": "Add reusable sequences and virtual scenarios",
+      "session_id": "ses_16dead0deffeG3nE620w091Wy1",
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
-      "updated_at": "2026-06-02T08:49:56.857Z"
+      "updated_at": "2026-06-04T10:07:51.206Z"
     },
     "todo:8": {
       "task_key": "todo:8",
       "task_label": "8",
-      "task_title": "Write Chinese pyuvm learning guide and update documentation index",
-      "session_id": "ses_178227890ffealoeTt0R0xHW3r",
+      "task_title": "Replace `test_async_fifo.py` with env-driven tests",
+      "session_id": "ses_16da28584ffe2iIXKtgY5cMxZo",
       "agent": "Sisyphus-Junior",
       "category": "quick",
-      "updated_at": "2026-06-02T10:55:03.460Z"
+      "updated_at": "2026-06-04T11:51:01.201Z"
     }
   }
 }

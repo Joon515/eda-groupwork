@@ -2,8 +2,15 @@ SIM ?= verilator
 TOPLEVEL_LANG ?= verilog
 TOPLEVEL ?= async_fifo_top
 MODULE ?= test_async_fifo
-TESTCASE ?= FifoSmokeTest
+TESTCASE ?= FifoEnvSmokeTest
 WAVES ?= 1
+
+PYUVM_CONDA_ENV ?= eda-pyuvm-fifo
+CONDA_RUN ?= conda run -n $(PYUVM_CONDA_ENV) --no-capture-output
+PYTHON ?= $(CONDA_RUN) python
+COCOTB_CONFIG ?= $(CONDA_RUN) cocotb-config
+PYUVM_CONDA_PREFIX ?= $(shell $(PYTHON) -c 'import sys; print(sys.prefix)')
+export PATH := $(PYUVM_CONDA_PREFIX)/bin:$(PATH)
 
 .DEFAULT_GOAL := run
 
@@ -17,8 +24,8 @@ ALMOST_FULL_VAL ?= 4
 ALMOST_EMPTY_EN ?= 0
 ALMOST_EMPTY_VAL ?= 4
 
-PYTHON_VERSION_TAG := $(shell python -c 'import sys; print("py" + str(sys.version_info.major) + str(sys.version_info.minor))')
-COCOTB_VERSION_TAG := $(shell python -c 'import cocotb; print(cocotb.__version__)' | tr . _)
+PYTHON_VERSION_TAG := $(shell $(PYTHON) -c 'import sys; print("py" + str(sys.version_info.major) + str(sys.version_info.minor))')
+COCOTB_VERSION_TAG := $(shell $(PYTHON) -c 'import cocotb; print(cocotb.__version__)' | tr . _)
 PYTHON_ENV_TAG := $(PYTHON_VERSION_TAG)-cocotb$(COCOTB_VERSION_TAG)
 PARAM_SIM_BUILD = sim_build/$(SIM)-$(PYTHON_ENV_TAG)-d$(DEPTH)-w$(WIDTH)-fw$(FWFT_EN)-out$(OUT_REG_EN)-sync$(SYNC_STAGES)-af$(ALMOST_FULL_EN)-afv$(ALMOST_FULL_VAL)-ae$(ALMOST_EMPTY_EN)-aev$(ALMOST_EMPTY_VAL)
 SIM_BUILD ?= $(PARAM_SIM_BUILD)
@@ -51,12 +58,13 @@ EXTRA_ARGS += -GALMOST_EMPTY_EN=$(ALMOST_EMPTY_EN)
 EXTRA_ARGS += -GALMOST_EMPTY_VAL=$(ALMOST_EMPTY_VAL)
 CUSTOM_COMPILE_DEPS += Makefile
 
-.PHONY: run regression regression-basic regression-core regression-boundary regression-advanced clean
+.PHONY: run regression regression-basic regression-core regression-boundary regression-advanced regression-modes clean
 
-BASIC_TESTS := FifoSmokeTest FifoResetTest FifoSingleWriteReadTest FifoDelayBehaviorTest
-SCOREBOARD_TESTS := FifoOrderPreservationTest FifoMultiItemDrainTest
-BOUNDARY_TESTS := FifoFullEmptyBoundaryTest FifoEmptyReadProtectionTest FifoAlmostFlagsTest
-ADVANCED_TESTS := FifoAsyncSimultaneousReadWriteTest FifoRandomRegressionTest FifoStressTest
+BASIC_TESTS := FifoEnvSmokeTest FifoAgentSmokeTest FifoResetTest FifoSingleWriteReadTest
+BOUNDARY_TESTS := FifoBoundaryTest FifoAlmostFlagsCoverageTest
+ADVANCED_TESTS := FifoConcurrentReadWriteTest FifoRandomRegressionTest FifoStressTest FifoCoverageClosureTest
+MODE_TESTS := FifoFwftTest FifoOutRegLatencyTest
+SCOREBOARD_TESTS := FifoBoundaryTest FifoConcurrentReadWriteTest
 CORE_TESTS := $(BASIC_TESTS) $(SCOREBOARD_TESTS)
 
 ##run:
@@ -72,11 +80,12 @@ run:
 		COCOTB_RESULTS_FILE="$(TEST_RESULTS_FILE)"
 
 regression:
-	$(MAKE) run TESTCASE=FifoSmokeTest
+	$(MAKE) run TESTCASE=FifoEnvSmokeTest
 	$(MAKE) regression-basic
 	$(MAKE) regression-core
 	$(MAKE) regression-boundary
 	$(MAKE) regression-advanced
+	$(MAKE) regression-modes
 
 regression-basic:
 	@for testcase in $(BASIC_TESTS); do \
@@ -89,18 +98,19 @@ regression-core:
 	done
 
 regression-boundary:
-	$(MAKE) run TESTCASE=FifoFullEmptyBoundaryTest DEPTH=8
-	$(MAKE) run TESTCASE=FifoEmptyReadProtectionTest
-	$(MAKE) run TESTCASE=FifoAlmostFlagsTest DEPTH=8 ALMOST_FULL_EN=1 ALMOST_FULL_VAL=2 ALMOST_EMPTY_EN=1 ALMOST_EMPTY_VAL=2
+	$(MAKE) run TESTCASE=FifoBoundaryTest DEPTH=8
+	$(MAKE) run TESTCASE=FifoAlmostFlagsCoverageTest DEPTH=8 ALMOST_FULL_EN=1 ALMOST_FULL_VAL=2 ALMOST_EMPTY_EN=1 ALMOST_EMPTY_VAL=2
 
 regression-advanced:
 	@for testcase in $(ADVANCED_TESTS); do \
 		$(MAKE) run TESTCASE=$$testcase || exit $$?; \
 	done
-	$(MAKE) run TESTCASE=FifoFwftDirectTest FWFT_EN=1 OUT_REG_EN=0
+
+regression-modes:
+	$(MAKE) run TESTCASE=FifoFwftTest FWFT_EN=1 OUT_REG_EN=0
 	$(MAKE) run TESTCASE=FifoOutRegLatencyTest FWFT_EN=0 OUT_REG_EN=1
 
 clean::
 	rm -rf sim_build results.xml results-*.xml *.vcd *.fst __pycache__ .pytest_cache
 
-include $(shell cocotb-config --makefiles)/Makefile.sim
+include $(shell $(COCOTB_CONFIG) --makefiles)/Makefile.sim

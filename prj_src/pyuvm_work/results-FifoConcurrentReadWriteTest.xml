@@ -1,6 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1780635392" />
+    <property name="random_seed" value="1780907288" />
     <testcase name="FifoEnvSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="207" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
@@ -25,7 +25,7 @@
     <testcase name="FifoStressTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="288" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoConcurrentReadWriteTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="303" time="0.02988743782043457" sim_time_ns="560.0" ratio_time="18736.969136147163" />
+    <testcase name="FifoConcurrentReadWriteTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="303" time="0.030774354934692383" sim_time_ns="560.0" ratio_time="18196.96956080479" />
     <testcase name="FifoFwftTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="316" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>

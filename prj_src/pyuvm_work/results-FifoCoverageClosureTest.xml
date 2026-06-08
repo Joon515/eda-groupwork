@@ -1,6 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1780635431" />
+    <property name="random_seed" value="1780907327" />
     <testcase name="FifoEnvSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="207" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
@@ -34,6 +34,6 @@
     <testcase name="FifoOutRegLatencyTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="325" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoCoverageClosureTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="335" time="0.042652130126953125" sim_time_ns="2660.0" ratio_time="62364.997764064035" />
+    <testcase name="FifoCoverageClosureTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="335" time="0.04341864585876465" sim_time_ns="2660.0" ratio_time="61264.00184502858" />
   </testsuite>
 </testsuites>

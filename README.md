@@ -223,6 +223,72 @@ design_rv1_tv7/FIFO
 | [覆盖率修补说明](prj_src/design_rv1_tv7/FIFO/doc/COVERAGE_PATCH.md) | 针对边界情况及难点覆盖率漏洞设计的特定修补测试说明。 | 最新 |
 | [添加自定义测试](prj_src/design_rv1_tv7/FIFO/doc/TEST_TUTORIAL.md) | 如何编写并向现有验证平台中添加新的测试用例。 | 略微过期 (仍具参考价值) |
 
+> 注：以上内容保留了原 SystemVerilog UVM 工作区说明和小组成员文档入口。当前仓库同时整理了顶层 `doc/` 与 `prj_src/` 目录，便于从仓库根目录直接阅读和运行。
+
+---
+
+## 🔄 当前源码路径补充
+
+除 README 中保留的历史/发布工作区说明外，当前仓库根目录下也提供了扁平化后的源码入口：
+
+```text
+prj_src/
+├── rtl_src/       # 异步 FIFO RTL：async_fifo_top、wptr、rptr、sync_gray、dual_port_ram 等
+├── uvm_src/       # SystemVerilog UVM 平台源码：interface、agent、sequence、scoreboard、coverage、test
+├── uvm_work/      # SV UVM 仿真工作区：Makefile、filelist、覆盖率报告等
+└── pyuvm_work/    # pyuvm + cocotb + Verilator 验证平台
+```
+
+`doc/` 目录下的 Markdown 文档和 PDF 学习资料均属于项目资料的一部分：Markdown 用于工程说明，PDF 用于课程背景、CDC/亚稳态/FIFO 深度等学习参考，请不要删除。
+
+---
+
+## 🐍 pyuvm + cocotb 验证平台
+
+pyuvm 平台是新增的开源工具链验证入口，位置如下：
+
+```text
+prj_src/pyuvm_work/
+├── Makefile
+├── environment.yml
+├── test_async_fifo.py
+└── pyuvm_fifo/
+    ├── fifo_config.py
+    ├── fifo_item.py
+    ├── fifo_sequences.py
+    ├── fifo_agent.py
+    ├── fifo_env.py
+    ├── fifo_scoreboard.py
+    ├── fifo_coverage.py
+    └── fifo_bfm.py
+```
+
+快速运行默认 pyuvm smoke test：
+
+```bash
+conda env create -f prj_src/pyuvm_work/environment.yml
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run
+```
+
+指定测试类或参数：
+
+```bash
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run TESTCASE=FifoSingleWriteReadTest
+
+conda run -n eda-pyuvm-fifo make -C prj_src/pyuvm_work run \
+  TESTCASE=FifoAlmostFlagsCoverageTest \
+  DEPTH=8 ALMOST_FULL_EN=1 ALMOST_FULL_VAL=2 \
+  ALMOST_EMPTY_EN=1 ALMOST_EMPTY_VAL=2
+```
+
+学习 pyuvm 实现时建议阅读：
+
+1. [PYUVM_GUIDE.md](doc/PYUVM_GUIDE.md)：pyuvm/cocotb 平台结构、运行命令和学习讲解。
+2. `prj_src/pyuvm_work/test_async_fifo.py`：测试类如何创建配置、启动 env 和 sequence。
+3. `prj_src/pyuvm_work/pyuvm_fifo/fifo_agent.py`：sequencer、driver、monitor 如何对应 UVM agent。
+4. `prj_src/pyuvm_work/pyuvm_fifo/fifo_scoreboard.py`：monitor-driven 参考模型如何检查 FIFO 数据顺序。
+5. `prj_src/pyuvm_work/pyuvm_fifo/fifo_coverage.py`：functional coverage 如何从 monitor observation 采样。
+
 ---
 
 ```txt

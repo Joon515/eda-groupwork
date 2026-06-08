@@ -1,6 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1780635350" />
+    <property name="random_seed" value="1780907257" />
     <testcase name="FifoEnvSmokeTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="207" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
@@ -13,7 +13,7 @@
     <testcase name="FifoSingleWriteReadTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="232" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>
-    <testcase name="FifoBoundaryTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="240" time="0.034490346908569336" sim_time_ns="1450.0" ratio_time="42040.74849823383" />
+    <testcase name="FifoBoundaryTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="240" time="0.038431406021118164" sim_time_ns="1450.0" ratio_time="37729.55897588605" />
     <testcase name="FifoAlmostFlagsCoverageTest" classname="test_async_fifo" file="/home/joon/miniconda3/envs/eda-pyuvm-fifo/lib/python3.11/site-packages/pyuvm/extension_classes.py" lineno="252" time="0" sim_time_ns="0" ratio_time="0">
       <skipped />
     </testcase>

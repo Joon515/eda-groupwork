@@ -1,0 +1,6 @@
+../../rtl/async_fifo_top.sv
+../../rtl/dual_port_ram.sv
+../../rtl/rptr.sv
+../../rtl/sync_gray.sv
+../../rtl/wptr.sv
+../../tb/async_fifo_tb_top.sv

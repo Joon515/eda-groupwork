@@ -1,0 +1,46 @@
+# do ../scripts/run.do async_fifo_tb_top 100ms work
+# ../build
+# ../output/log
+# ../output/wave
+# ../output/cov
+# work
+# async_fifo_tb_top
+# Model Technology ModelSim SE-64 vmap 10.4 Lib Mapping Utility 2014.12 Dec  3 2014
+# vmap -modelsim_quiet work ../build/work 
+# Copying D:/modeltech64_10.4/win64/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied D:/modeltech64_10.4/win64/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# Model Technology ModelSim SE-64 vmap 10.4 Lib Mapping Utility 2014.12 Dec  3 2014
+# vmap -modelsim_quiet uvm D:/modeltech64_10.4/win64/../uvm-1.1d 
+# Modifying modelsim.ini
+# Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+# Start time: 17:48:02 on Jun 14,2026
+# vlog -sv -work work -timescale 1ns/1ps "+cover=bcesft" -f file_list_rtl.f 
+# -- Compiling module dual_port_ram
+# -- Compiling module sync_gray
+# -- Compiling module wptr
+# -- Compiling module rptr
+# -- Compiling module async_fifo_top
+# 
+# Top level modules:
+# 	async_fifo_top
+# End time: 17:48:02 on Jun 14,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+# Start time: 17:48:02 on Jun 14,2026
+# vlog -sv -work work -timescale 1ns/1ps "+incdir+D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src" -f file_list_tb.f 
+# -- Compiling interface async_fifo_if
+# -- Compiling package async_fifo_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Compiling module async_fifo_tb_top
+# -- Importing package async_fifo_pkg
+# 
+# Top level modules:
+# 	async_fifo_tb_top
+# End time: 17:48:02 on Jun 14,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# fifo_full_empty_test fifo_mixed_test fifo_extreme_test fifo_vibration_test
+# ======================================================
+#  Running Test: fifo_full_empty_test
+# ======================================================

@@ -1,0 +1,128 @@
+# vsim 
+# Start time: 17:48:15 on Jun 14,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# 
+# Loading sv_std.std
+# Loading mtiUvm.uvm_pkg
+# Loading work.async_fifo_pkg(fast)
+# Loading work.async_fifo_tb_top(fast)
+# Loading work.async_fifo_if(fast__1)
+# Loading work.async_fifo_top(fast)
+# Loading work.dual_port_ram(fast)
+# Loading work.wptr(fast)
+# Loading work.rptr(fast)
+# Loading work.sync_gray(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.async_fifo_if(fast)
+# Loading D:/modeltech64_10.4/uvm-1.1d\win64\uvm_dpi.dll
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(215) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.2
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(217) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test fifo_extreme_test...
+# UVM_INFO ../../tb/fifo_extreme_test.sv(41) @ 0: uvm_test_top [TEST3] Step 1: Write until Full...
+# UVM_INFO ../../tb/fifo_extreme_test.sv(50) @ 5655000: uvm_test_top [TEST3] FIFO is now FULL. Forcing 10 additional WRITES...
+# UVM_INFO ../../tb/fifo_extreme_test.sv(67) @ 6675000: uvm_test_top [TEST3] Step 2: Read until Empty...
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6685000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hdf80, Expected: 'hdf80
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6735000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hbe80, Expected: 'hbe80
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6755000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h86fd, Expected: 'h86fd
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6795000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h814, Expected: 'h814
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6805000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h48b8, Expected: 'h48b8
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6825000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hd89, Expected: 'hd89
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6875000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hdc19, Expected: 'hdc19
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6925000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h7d63, Expected: 'h7d63
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6935000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hd34d, Expected: 'hd34d
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 6955000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h897f, Expected: 'h897f
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7005000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h68df, Expected: 'h68df
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7035000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hf86b, Expected: 'hf86b
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7075000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h27a0, Expected: 'h27a0
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7105000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h6272, Expected: 'h6272
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7135000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hd00b, Expected: 'hd00b
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7155000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'he9f1, Expected: 'he9f1
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7165000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hac88, Expected: 'hac88
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7175000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h245d, Expected: 'h245d
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7185000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hfa88, Expected: 'hfa88
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7195000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'he6dc, Expected: 'he6dc
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7215000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h4e8c, Expected: 'h4e8c
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7225000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h54b, Expected: 'h54b
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7275000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h50b5, Expected: 'h50b5
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7305000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h3614, Expected: 'h3614
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7335000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h1fec, Expected: 'h1fec
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7385000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h73f4, Expected: 'h73f4
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7425000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hc67a, Expected: 'hc67a
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7455000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h8f40, Expected: 'h8f40
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7475000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hc5a, Expected: 'hc5a
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7505000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hde34, Expected: 'hde34
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7535000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h8c39, Expected: 'h8c39
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7545000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'heff7, Expected: 'heff7
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7575000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h8d2a, Expected: 'h8d2a
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7605000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h7eae, Expected: 'h7eae
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7655000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hd859, Expected: 'hd859
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7665000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h8d61, Expected: 'h8d61
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7675000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h56c, Expected: 'h56c
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7725000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h2220, Expected: 'h2220
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7765000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h5eca, Expected: 'h5eca
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7815000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h1ac, Expected: 'h1ac
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7855000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h77fd, Expected: 'h77fd
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7905000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h6eeb, Expected: 'h6eeb
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7915000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h3f7e, Expected: 'h3f7e
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7935000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h4313, Expected: 'h4313
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 7985000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hf564, Expected: 'hf564
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8005000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h22b7, Expected: 'h22b7
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8045000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h71c2, Expected: 'h71c2
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8055000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hb97e, Expected: 'hb97e
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8075000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h39bf, Expected: 'h39bf
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8095000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h62e6, Expected: 'h62e6
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8105000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h7960, Expected: 'h7960
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8115000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h8f4a, Expected: 'h8f4a
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8135000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h3088, Expected: 'h3088
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8165000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h246b, Expected: 'h246b
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8185000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h7d61, Expected: 'h7d61
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8215000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h9a66, Expected: 'h9a66
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8255000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h3522, Expected: 'h3522
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8275000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h1326, Expected: 'h1326
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8305000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h78f5, Expected: 'h78f5
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8325000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'h58cb, Expected: 'h58cb
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8335000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'he102, Expected: 'he102
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8345000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hc269, Expected: 'hc269
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8385000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hcdd0, Expected: 'hcdd0
+# UVM_INFO ../../tb/fifo_extreme_test.sv(75) @ 8435000: uvm_test_top [TEST3] FIFO is now EMPTY. Forcing 10 additional READS...
+# UVM_INFO ../../tb/fifo_scoreboard.sv(67) @ 8435000: uvm_test_top.env.scb [SCB_MATCH] SUCCESS! Read: 'hff37, Expected: 'hff37
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1268) @ 9255000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO ../../tb/fifo_scoreboard.sv(86) @ 9255000: uvm_test_top.env.scb [SCB_STATUS] Final Results -> Matches: 64, Errors: 0
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   73
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [Questa UVM]     2
+# [RNTST]     1
+# [SCB_MATCH]    64
+# [SCB_STATUS]     1
+# [TEST3]     4
+# [TEST_DONE]     1
+# ======================================================
+#  Running Test: fifo_vibration_test
+# ======================================================

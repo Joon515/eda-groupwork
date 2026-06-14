@@ -1,0 +1,246 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dD:/git_repo/eda_groupwork/eda-groupwork/svuvm_prj/async_fifo/sim/workspace
+T_opt
+!s110 1781430483
+VP3oNo52TmfIQC5UX_gnXB1
+04 17 4 work async_fifo_tb_top fast 0
+=1-40c2ba4b7dcb-6a2e78d3-9b-65d8
+o-quiet -auto_acc_if_foreign -work work -L uvm +acc
+n@_opt
+OL;O;10.4;61
+Yasync_fifo_if
+Z1 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z2 !s110 1781430482
+!i10b 1
+!s100 BL1TkR5Om@;I[mgPBhYaf0
+I`A3_SgU940L?aadKj]OHU0
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 async_fifo_if_sv_unit
+S1
+R0
+w1781413102
+8../../tb/async_fifo_if.sv
+F../../tb/async_fifo_if.sv
+L0 9
+Z4 OL;L;10.4;61
+r1
+!s85 0
+31
+Z5 !s108 1781430482.164000
+Z6 !s107 ../../tb/fifo_vibration_test.sv|../../tb/fifo_extreme_test.sv|../../tb/fifo_mixed_test.sv|../../tb/fifo_full_empty_test.sv|../../tb/fifo_base_test.sv|../../tb/fifo_env.sv|../../tb/fifo_coverage.sv|../../tb/fifo_scoreboard.sv|../../tb/fifo_driver_monitor.sv|../../tb/fifo_seq_item.sv|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/uvm_macros.svh|../../tb/async_fifo_tb_top.sv|../../tb/async_fifo_pkg.sv|../../tb/async_fifo_if.sv|
+Z7 !s90 -sv|-work|work|-timescale|1ns/1ps|+incdir+D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src|-f|file_list_tb.f|
+!i113 0
+Z8 o-sv -work work -timescale 1ns/1ps -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z9 !s92 -sv -work work -timescale 1ns/1ps +incdir+D:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src +incdir+../../tb -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Xasync_fifo_pkg
+R1
+Z10 DXx6 mtiUvm 7 uvm_pkg 0 22 02@e1POGTiN=><];7MkU?0
+R2
+!i10b 1
+!s100 B^8V]6V1N4<TU5YU_VZ@K2
+IP4VNA@]kJ=8mh_QB3OY[n3
+VP4VNA@]kJ=8mh_QB3OY[n3
+S1
+R0
+w1781428478
+8../../tb/async_fifo_pkg.sv
+F../../tb/async_fifo_pkg.sv
+Z11 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/uvm_macros.svh
+Z12 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh
+Z13 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh
+Z14 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh
+Z15 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh
+Z16 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh
+Z17 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh
+Z18 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh
+Z19 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh
+Z20 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh
+Z21 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh
+Z22 FD:/modeltech64_10.4/win64/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh
+F../../tb/fifo_seq_item.sv
+F../../tb/fifo_driver_monitor.sv
+F../../tb/fifo_scoreboard.sv
+F../../tb/fifo_coverage.sv
+F../../tb/fifo_env.sv
+F../../tb/fifo_base_test.sv
+F../../tb/fifo_full_empty_test.sv
+F../../tb/fifo_mixed_test.sv
+F../../tb/fifo_extreme_test.sv
+F../../tb/fifo_vibration_test.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 0
+R8
+R9
+vasync_fifo_tb_top
+R1
+R10
+DXx4 work 14 async_fifo_pkg 0 22 P4VNA@]kJ=8mh_QB3OY[n3
+R2
+!i10b 1
+!s100 H?>W=XHJfmf_zSg`9UYYS1
+IlOmWi>67=5D?:FF4G3Zn^1
+R3
+!s105 async_fifo_tb_top_sv_unit
+S1
+R0
+w1781423731
+8../../tb/async_fifo_tb_top.sv
+F../../tb/async_fifo_tb_top.sv
+R11
+R12
+R13
+R14
+R15
+R16
+R17
+R18
+R19
+R20
+R21
+R22
+L0 20
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 0
+R8
+R9
+vasync_fifo_top
+R1
+R2
+!i10b 1
+!s100 AANPLHMRRe<Cm>Z=HVF5a0
+I]N^:D;hbo>3H0;5XJOE:80
+R3
+!s105 async_fifo_top_sv_unit
+S1
+R0
+w1781409508
+8../../rtl/async_fifo_top.sv
+F../../rtl/async_fifo_top.sv
+L0 3
+R4
+r1
+!s85 0
+31
+Z23 !s108 1781430482.030000
+Z24 !s107 ../../rtl/async_fifo_top.sv|../../rtl/rptr.sv|../../rtl/wptr.sv|../../rtl/sync_gray.sv|../../rtl/dual_port_ram.sv|
+Z25 !s90 -sv|-work|work|-timescale|1ns/1ps|+cover=bcesft|-f|file_list_rtl.f|
+!i113 0
+Z26 !s102 +cover=bcesft
+Z27 o-sv -work work -timescale 1ns/1ps +cover=bcesft -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+vdual_port_ram
+R1
+R2
+!i10b 1
+!s100 ^=]fYMCUg9fD3WMD_lD`40
+IQTGh41W3oNX737KTVGb050
+R3
+!s105 dual_port_ram_sv_unit
+S1
+R0
+w1781331636
+8../../rtl/dual_port_ram.sv
+F../../rtl/dual_port_ram.sv
+L0 3
+R4
+r1
+!s85 0
+31
+R23
+R24
+R25
+!i113 0
+R26
+R27
+vrptr
+R1
+R2
+!i10b 1
+!s100 abNSFPX4?mEYznGA7CUT@0
+IaJ@`Hc3BO2YYcA]=kV6Je1
+R3
+!s105 rptr_sv_unit
+S1
+R0
+w1781410334
+8../../rtl/rptr.sv
+F../../rtl/rptr.sv
+L0 3
+R4
+r1
+!s85 0
+31
+R23
+R24
+R25
+!i113 0
+R26
+R27
+vsync_gray
+R1
+R2
+!i10b 1
+!s100 H@cT9FR<ci5>6@XAHfiYD0
+IN:DnAHZE_^jMgSIT69E`V2
+R3
+!s105 sync_gray_sv_unit
+S1
+R0
+w1781337890
+8../../rtl/sync_gray.sv
+F../../rtl/sync_gray.sv
+L0 3
+R4
+r1
+!s85 0
+31
+R23
+R24
+R25
+!i113 0
+R26
+R27
+vwptr
+R1
+R2
+!i10b 1
+!s100 D[`3Z]_U:UY@IjPJ5z97k0
+IR0SXEDiRNJ_^K@1__PH533
+R3
+!s105 wptr_sv_unit
+S1
+R0
+w1781410316
+8../../rtl/wptr.sv
+F../../rtl/wptr.sv
+L0 3
+R4
+r1
+!s85 0
+31
+R23
+R24
+R25
+!i113 0
+R26
+R27

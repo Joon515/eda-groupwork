@@ -1,0 +1,10 @@
+-html
+-htmldir
+../output/cov/html_cov
+-code
+bcesft
+-assert
+-source
+-instance
+/async_fifo_tb_top/u_dut
+../output/cov/merged_cov.ucdb
